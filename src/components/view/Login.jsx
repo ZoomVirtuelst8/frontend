@@ -22,9 +22,9 @@ const Login = () => {
         <Link to="/signIn">
           <button className="btnslogin">Iniciar Sesion</button>
         </Link>
-        <Link to="/registro">
+        {/* <Link to="/registro">
           <button className="btnslogin">Registrarse</button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
