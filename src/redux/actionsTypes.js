@@ -1,4 +1,8 @@
 
+//todo inicio de session
+export const SESION = 'SESION'
+export const ID = 'ID'
+
 
 
 //todo funcionalidad
@@ -98,7 +102,7 @@ export const DELETEVENTA = "DELETEVENTA";
 export const RU = "RU";
 export const GUS = "GUS";
 export const VACIAR_USE = "VACIAR_USE";
-export const CHECKUSE = "CHECKUSE";
+// export const CHECKUSE = "CHECKUSE";
 export const GETUSER = "GETUSER";
 export const GETUSERIDNAME = "GETUSERIDNAME";
 export const GETUSERBI = "GETUSERBI";
@@ -116,35 +120,29 @@ export const DELETEPAG = "DELETEPAG";
 export const LOGOUT = "LOGOUT";
 
 //todo para errores
+export const ERROR = "ERROR";
 export const PERROR = "PERROR";
 export const GERROR = "GERROR";
 export const RESETERROR = "RESETERROR";
 //todo para adult corte
 export const PAD = "PAD";
-export const GAD = "GAD";
 export const DELETEC = 'DELETEC'
 //todo para adult parcial
 export const PPA = "PPA";
-export const GPA = "GPA";
 //todo para amateur
 export const PAM = "PAM";
-export const GAM = "GAM";
 //todo para bonga
 export const PBO = "PBO";
-export const GBO = "GBO";
 export const DELETEBO = 'DELETEBO'
 //todo para cam4
 export const PCA = "PCA";
-export const GCA = "GCA";
 //todo para chaturbate
 export const PCH = "PCH";
-export const GCH = "GCH";
 //todo para DIRTY
 export const PDI = "PDI";
-export const GDI = "GDI";
+// export const GDI = "GDI";
 //todo para isLive
 export const PIL = "PIL";
-export const GIL = "GIL";
 //todo para mondo
 export const MONDO = "MONDO";
 //todo para mYFREECAMS
@@ -153,10 +151,8 @@ export const MYFREECAMS = " MYFREECAMS";
 export const SAKURA = " SAKURA";
 //todo para sender
 export const PSE = "PSE";
-export const GSE = "GSE";
 //todo para SKYPE
 export const PSK = "PSK";
-export const GSK = "GSK";
 //TODO PARA STREAMATE
 export const STREAMATE = " STREAMATE";
 export const DELETEST = 'DELETEST'
@@ -164,14 +160,10 @@ export const DELETEST = 'DELETEST'
 export const STREAMRAY = " STREAMRAY";
 //todo para STRIPCHAT
 export const PST = "PST";
-export const GST = "GST";
 export const TRIPLESIETE = "TRIPLESIETE";
 //todo para VX
 export const PVX = "PVX";
-export const GVX = "GVX";
 //todo para XLOVE
 export const PXL = "PXL";
-export const GXL = "GXL";
 //todo para XLOVENUEVA
 export const PXLN = "PXLN";
-export const GXLN = "GXLN";

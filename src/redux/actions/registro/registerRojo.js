@@ -5,11 +5,15 @@ import { ROJOS, GETROJOS, PERROR, GERROR } from "../../actionsTypes.js";
 const URL = import.meta.env.VITE_REACT_APP_URL;
 const ROJO = import.meta.env.VITE_REACT_APP_URL_ROJO;
 
-export const postRojo = (rojo) => {
+export const postRojo = (rojo, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${ROJO}`;
-      const { data } = await axios.post(endpoint, rojo);
+      const { data } = await axios.post(endpoint, rojo, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: ROJOS,
         payload: data,
@@ -23,11 +27,15 @@ export const postRojo = (rojo) => {
   };
 };
 
-export const getAllRojo = () => {
+export const getAllRojo = (token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${ROJO}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: GETROJOS,
         payload: data,

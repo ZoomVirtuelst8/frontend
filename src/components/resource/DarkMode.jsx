@@ -18,10 +18,10 @@ const DarkMode = () => {
     dispatch(modoDark(!darkMode));
   };
   return (
-    <div className="fixed bottom-2 right-2">
+    <div className="fixed bottom-1 right-1">
       <button
         onClick={handleDark}
-        className="dark:bg-black dark:text-slate-100 text-yellow-500 bg-black text-4xl rounded-full p-2"
+        className="dark:bg-black dark:text-white text-yellow-500 bg-black text-xl rounded-full p-2 "
       >
         {darkMode ? <FaMoon /> : <TiStarburst />}
       </button>

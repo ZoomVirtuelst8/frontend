@@ -40,9 +40,10 @@ const RegistrarProducto = () => {
   const navigate = useNavigate();
   const productos = useSelector((state) => state.productos);
   const errorServer = useSelector((state) => state.error);
+  const token = useSelector((state) => state.token);
 
   useEffect(() => {
-    dispatch(getAllProductos());
+    dispatch(getAllProductos(token));
   }, [dispatch]);
 
   const [error, setError] = useState("");
@@ -97,7 +98,7 @@ const RegistrarProducto = () => {
     e.preventDefault();
     const errores = valida(nombre, productos);
     if (errores.length === 0) {
-      dispatch(postProducto(producto));
+      dispatch(postProducto(producto, token));
       setProducto({
         nombre: "",
         descripcion: "",
@@ -115,76 +116,81 @@ const RegistrarProducto = () => {
     }
   };
   return (
-    <div className="contenedor1">
+    <div className="contenedor">
       {confirmacion && (
         <div>
           <h1>{confirmacion}</h1>
         </div>
       )}
       {showForm && (
-        <div className="contenedor2">
+        <div>
           <div className="divTitulo">
-          <h1 className="titulo">Registro De Productos </h1>
+            <h1 className="titulo">Registro De Productos </h1>
           </div>
-          <form onSubmit={handleSubmit} className="flex justify-center">
-            <section className="flex flex-col items-center  px-10 bg-indigo-300 max-w-min rounded-lg m-2 p-1 ">
-              <section className="w-96 m-4">
-                <label className="subTitulo">Nombre Del Producto:</label>
-                <input
-                  type="text"
-                  value={producto.nombre}
-                  onChange={handleNombre}
-                  name="nombre"
-                  placeholder="Escriba el nombre del producto"
-                  className="input"
-                />
-              </section>
-              {error && (
-                <div className="text-center text-red-500 font-bold">
-                  {error}
+          <form onSubmit={handleSubmit}>
+            <section className="sectionform">
+              <section className="section">
+                <div className="divlabel">
+                  <label className="label">Nombre Del Producto:</label>
                 </div>
-              )}
-              <section className="w-96 m-4">
-                <label className="subTitulo">Descripcion Del Producto:</label>
-                <input
-                  type="text"
-                  value={producto.descripcion}
-                  onChange={handleDescripcion}
-                  name="descripcion"
-                  placeholder="Describa el producto"
-                  className="input"
-                />
-              </section>
-              {warning && (
-                <div className="text-center text-red-500 font-bold">
-                  {warning.descripcion}
+                <div className="divinput">
+                  <input
+                    type="text"
+                    value={producto.nombre}
+                    onChange={handleNombre}
+                    name="nombre"
+                    placeholder="Escriba el nombre del producto"
+                    className="input"
+                  />
                 </div>
-              )}
-              <section className="w-96 m-4">
-                <label className="subTitulo">Link De La Imagen:</label>
-                <input
-                  type="text"
-                  value={producto.imagen}
-                  onChange={handleImagen}
-                  name="imagen"
-                  placeholder="https://www.google.com/imagen/gatos"
-                  className="input"
-                />
+              </section>
+              {error && <div className="error">{error}</div>}
+              <section className="section">
+                <div className="divlabel">
+                  <label className="label">Descripcion Del Producto:</label>
+                </div>
+                <div className="divinput">
+                  <input
+                    type="text"
+                    value={producto.descripcion}
+                    onChange={handleDescripcion}
+                    name="descripcion"
+                    placeholder="Describa el producto"
+                    className="input"
+                  />
+                </div>
+              </section>
+              {warning && <div className="error">{warning.descripcion}</div>}
+              <section className="section">
+                <div className="divlabel">
+                  <label className="label">Link De La Imagen:</label>
+                </div>
+
+                <div className="divinput">
+                  <input
+                    type="text"
+                    value={producto.imagen}
+                    onChange={handleImagen}
+                    name="imagen"
+                    placeholder="https://www.google.com/imagen/gatos"
+                    className="input"
+                  />
+                </div>
               </section>
               {warning && (
                 <div className="text-center text-red-500 font-bold">
                   {warning.imagen}
                 </div>
               )}
-              <section className="flex items-center justify-center">
+            </section>
+              <section className="sectionbtns">
                 <button
                   type="submit"
-                  className="btn-w w-auto font-bold text-4xl"
+                  className="btns"
                 >
-                  <BiSend />
+                  <BiSend className="BiSend"/>
                 </button>
               </section>
-            </section>
           </form>
         </div>
       )}

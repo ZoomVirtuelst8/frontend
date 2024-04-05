@@ -1,40 +1,26 @@
 import axios from "axios";
-import { PERROR, GERROR, GCH, PCH } from "../../actionsTypes.js";
+import { PERROR, PCH } from "../../actionsTypes.js";
 
 const URL = import.meta.env.VITE_REACT_APP_URL;
 const CH = import.meta.env.VITE_REACT_APP_CH;
 
-export const pch = (coch) => {
+export const pch = (coch, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${CH}`;
-      const { data } = await axios.post(endpoint, { coch });
+      const { data } = await axios.post(endpoint, {coch}, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: PCH,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: ERROR,
-        payload: error,
-      });
-    }
-  };
-};
-
-export const gch = () => {
-  return async (dispatch) => {
-    try {
-      const endpoint = `${URL}/${CH}`;
-      const { data } = await axios.get(endpoint);
-      dispatch({
-        type: GCH,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: ERROR,
-        payload: error,
+        type: PERROR,
+        payload: error.response.data.error,
       });
     }
   };

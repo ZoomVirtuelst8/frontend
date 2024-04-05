@@ -6,6 +6,7 @@ import {
   postPagina,
   getAllPagina,
 } from "../../redux/actions/registro/registerPaginas.js";
+import { resetError } from "../../redux/actions/resetError.js";
 
 const valida = (pagina, paginas) => {
   let error = "";
@@ -27,12 +28,18 @@ const RegistrarPagina = () => {
   const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(true);
   const [confirmacion, setConfirmacion] = useState("");
+  const [showConfirmacion, setShowConfirmacion] = useState(false);
   const paginas = useSelector((state) => state.paginas);
+  const token = useSelector((state) => state.token);
+  const perror = useSelector((state) => state.Error);
 
   useEffect(() => {
-    dispatch(getAllPagina());
+    dispatch(getAllPagina(token));
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(resetError());
+  }, [pagina]);
 
   const handlePagina = (event) => {
     const paginaValue = event.target.value;
@@ -40,59 +47,66 @@ const RegistrarPagina = () => {
     setPagina(paginaValue);
     setError(errorText);
   };
-
+  console.log(perror);
   const handleSubmit = (e) => {
     e.preventDefault();
-    const errores = valida(pagina);
+
+    const errores = valida(pagina, paginas);
     if (errores.length === 0) {
-      dispatch(postPagina(pagina));
-      setPagina("");
-      setShowForm(false);
-      setConfirmacion("se envio la solicitud.");
+      dispatch(postPagina(pagina, token));
+      setShowConfirmacion(true);
+      setConfirmacion(
+        "Espere un momento creando pagina nueva... Navega automaticamente despues de creada la pagina"
+      );
+      // setConfirmacion('Pagina creada correctamente.')
+      setTimeout(() => {
+        navigate("/crear");
+      }, 3000);
+    }
+    if (perror) {
+      setShowForm(true);
+      setShowConfirmacion(false);
       setConfirmacion("");
-      navigate("/crear");
-      setError(errores);
     }
   };
-
+  console.log(showConfirmacion);
   return (
-    <div className="contenedor1">
-      {confirmacion && (
-        <div>
-          <h1>{confirmacion}</h1>
+    <div className="contenedor">
+      {showConfirmacion && (
+        <div className="flex">
+          <h1 className=" text-justify">{confirmacion}</h1>
         </div>
       )}
       {showForm && (
-        <div className="contenedor2">
+        <div>
           <div className="divTitulo">
-          <h1 className="titulo">Registro De Paginas</h1>
+            <h1 className="titulo">Registro De Paginas</h1>
           </div>
-          <form
-            onSubmit={handleSubmit}
-            className="flex justify-center items-center flex-col"
-          >
-            <section className="form">
-
-            <section className=" w-96 m-5">
-              <label className="subTitulo">Nombre De La Pagina</label>
-              <input
-                type="text"
-                className="input"
-                value={pagina}
-                onChange={handlePagina}
-                name="pagina"
-                placeholder="Escriba el nombre de la pagina"
-              />
+          <form onSubmit={handleSubmit}>
+            <section className="sectionform">
+              <section>
+                <div className="divlabel">
+                  <label className="label">Nombre De La Pagina</label>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    className="input"
+                    value={pagina}
+                    onChange={handlePagina}
+                    name="pagina"
+                    placeholder="Escriba el nombre de la pagina"
+                  />
+                </div>
+              </section>
+              {error && <div className="error">{error}</div>}
+              {perror && <div className="error">{perror.error}</div>}
+              <section className="sectionbtns">
+                <button type="submit" className="btns">
+                  <BiSend className="BiSend" />
+                </button>
+              </section>
             </section>
-            {error && (
-              <div className="text-center text-red-500 font-bold">{error}</div>
-            )}
-            <section className="flex m-5 items-center justify-center">
-              <button type="submit" className="btn-w w-auto font-bold text-4xl">
-                <BiSend />
-              </button>
-            </section>
-      </section>
           </form>
         </div>
       )}

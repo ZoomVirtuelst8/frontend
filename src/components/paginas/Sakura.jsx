@@ -14,12 +14,14 @@ const Sakura = () => {
   const reporte = useSelector((state) => state.spg);
   const errors = useSelector((state) => state.error);
   const quincenas = useSelector((state) => state.quincenas);
+  const token = useSelector((state) => state.token);
+
   const [input, setInput] = useState([]);
   const [sakura, setSakura] = useState(input);
   const [id, setId] = useState("");
 
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
   useEffect(() => {
     setInput([])
@@ -76,7 +78,7 @@ const Sakura = () => {
   };
 
   const handleSubmit = () => {
-    dispatch(postSakura(sakura))
+    dispatch(postSakura(sakura, token))
     setInput([])
     setSakura([])
   };

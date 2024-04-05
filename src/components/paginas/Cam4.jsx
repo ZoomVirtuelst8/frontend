@@ -17,12 +17,14 @@ const Cam4 = () => {
   const reporte = useSelector((state) => state.spg);
   const errors = useSelector((state) => state.error);
   const quincenas = useSelector((state) => state.quincenas);
+  const token = useSelector((state) => state.token);
+
   const [id, setId] = useState("");
   useEffect(() => {
     setInput([])
   }, [id])
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
 
   useEffect(() => {
@@ -94,7 +96,7 @@ const Cam4 = () => {
   };
 
   const handlerSubmit = () => {
-    dispatch(pca(coca));
+    dispatch(pca(coca, token));
     setInput([]);
     setCoca([]);
   };

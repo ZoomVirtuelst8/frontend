@@ -13,11 +13,15 @@ const URL = import.meta.env.VITE_REACT_APP_URL;
 const COMPRA = import.meta.env.VITE_REACT_APP_URL_COMPRAS;
 const DELETE = import.meta.env.VITE_REACT_APP_URL_DELETE;
 
-export const postCompra = (compra) => {
+export const postCompra = (compra, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${COMPRA}`;
-      const { data } = await axios.post(endpoint, compra);
+      const { data } = await axios.post(endpoint, compra, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: POSTCOMPRA,
         payload: data,
@@ -31,11 +35,15 @@ export const postCompra = (compra) => {
   };
 };
 
-export const getAllCompras = () => {
+export const getAllCompras = (token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${COMPRA}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: GETCOMPRA,
         payload: data,
@@ -49,11 +57,15 @@ export const getAllCompras = () => {
   };
 };
 
-export const getCompraById = (id) => {
+export const getCompraById = (id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${COMPRA}/${id}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: GETBICOMPRA,
         payload: data,
@@ -67,11 +79,15 @@ export const getCompraById = (id) => {
   };
 };
 
-export const updateCompra = (id, nCompra) => {
+export const updateCompra = (id, nCompra, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${COMPRA}/${id}`;
-      const { data } = await axios.put(endpoint, nCompra);
+      const { data } = await axios.put(endpoint, nCompra, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: UPDATECOMPRA,
         payload: data,
@@ -85,11 +101,15 @@ export const updateCompra = (id, nCompra) => {
   };
 };
 
-export const deleteCompra = (id) => {
+export const deleteCompra = (id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${COMPRA}/${DELETE}/${id}`;
-      const { data } = await axios.delete(endpoint);
+      const { data } = await axios.delete(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: DELETECOMPRA,
         payload: data,

@@ -16,6 +16,8 @@ const User = () => {
   const userBI = useSelector((state) => state.userB);
   const ubicacion = useSelector((state) => state.ubicaciones);
   const porcentaje = useSelector((state) => state.porcentajes);
+  const token = useSelector((state) => state.token);
+
 
   // Estado local para manejar los datos editados
   const [editedUser, setEditedUser] = useState({
@@ -30,20 +32,20 @@ const User = () => {
   });
 
   useEffect(() => {
-    dispatch(getUserBI(id));
-    dispatch(getAllPorcentaje());
-    dispatch(getAllUbicacion());
+    dispatch(getUserBI(id, token));
+    dispatch(getAllPorcentaje(token));
+    dispatch(getAllUbicacion(token));
   }, [dispatch, id]);
   useEffect(() => {
     setEditedUser({
-      nombre: userBI.nombre || "",
-      apellido: userBI.apellido || "",
-      direccion: userBI.direccion || "",
-      telefono: userBI.telefono || "",
-      whatsapp: userBI.whatsapp || "",
-      ubicacion: userBI.p_ubicacion.ubicacion || "",
-      porcentaje: userBI.p_porcentaje.nombre || "",
-      admin: userBI.admin || false,
+      nombre: userBI?.nombre || "",
+      apellido: userBI?.apellido || "",
+      direccion: userBI?.direccion || "",
+      telefono: userBI?.telefono || "",
+      whatsapp: userBI?.whatsapp || "",
+      ubicacion: userBI?.p_ubicacion?.ubicacion || "",
+      porcentaje: userBI?.p_porcentaje?.nombre || "",
+      admin: userBI?.admin || false,
     });
   }, [userBI]);
 
@@ -57,7 +59,7 @@ const User = () => {
   };
 
   const handleUpdateUser = () => {
-    dispatch(updateUser(id, editedUser));
+    dispatch(updateUser(id, editedUser, token));
     navigate(`/modelo/${id}`);
   };
   return (

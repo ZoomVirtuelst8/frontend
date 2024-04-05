@@ -1,15 +1,5 @@
 
 import { Routes, Route, useLocation } from "react-router-dom";
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  RedirectToSignIn,
-  SignIn,
-  SignUp,
-  UserButton,
-  useAuth,
-} from "@clerk/clerk-react";
 
 import Adultregular from "./components/paginas/Adultregular";
 import Adultparcial from "./components/paginas/Adultparcial";
@@ -42,6 +32,7 @@ import DetailUser from "./components/view/DetailUser.jsx";
 import Ventas from "./components/view/Ventas.jsx";
 
 import RegisterUser from "./components/registro/RegisterUser.jsx";
+import RegisterUserAuth from "./components/registro/RegisterUserAuth.jsx";
 import RegistrarPagina from "./components/registro/RegistrarPagina.jsx";
 import RegistrarProducto from "./components/registro/RegistrarProducto.jsx";
 import RegistroUserName from "./components/registro/RegistroUserName.jsx";
@@ -65,80 +56,27 @@ import Prestamos from "./components/registro/Prestamos.jsx";
 import Protected from "./components/resource/Protected.jsx";
 import DarkMode from './components/resource/DarkMode.jsx';
 import TripleSiete from "./components/paginas/TripleSiete.jsx";
+import SignIn from "./components/view/SignIn.jsx";
 
 function App() {
-  const { isLoaded, userId, sessionId, getToken } = useAuth();
   const { pathname } = useLocation();
-
-  const protecte = [
-    "/home",
-    "/loader",
-    "/registro",
-    "/crear",
-    "/crear/username",
-    "/crear/pagina",
-    "/crear/producto",
-    "/crear/quincena",
-    "/crear/moneda",
-    "/crear/estadisticas",
-    "/crear/porcentaje",
-    "/crear/ubicacion",
-    "/crear/compras",
-    "/crear/prestamos",
-    "/crear/ralacion",
-    "/editar/producto",
-    "/editar/username/:id",
-    "/editar/user/:id",
-    "/editar/prestamo/:id",
-    "/user/:id",
-    "/modelo/comment/:id",
-    "/ventas",
-    "/estadisticas/carga/adultparcial",
-    "/estadisticas/carga/adultregular",
-    "/estadisticas/carga/amateur",
-    "/estadisticas/carga/bonga",
-    "/estadisticas/carga/cam4",
-    "/estadisticas/carga/chaturbate",
-    "/estadisticas/carga/dirty",
-    "/estadisticas/carga/islive",
-    "/estadisticas/carga/mondo",
-    "/estadisticas/carga/myfreecams",
-    "/estadisticas/carga/sakura",
-    "/estadisticas/carga/sender",
-    "/estadisticas/carga/skype",
-    "/estadisticas/carga/streamate",
-    "/estadisticas/carga/streamray",
-    "/estadisticas/carga/stripchat",
-    "/estadisticas/carga/vx",
-    "/estadisticas/carga/xlove",
-    "/estadisticas/carga/xlovenueva",
-  ];
-  if (!isLoaded || (!userId && protecte.includes(pathname))) {
-    return <Protected />;
-  }
   
   return (
     <div>
       {pathname !== "/" &&
+        pathname !== "/signIn" &&
         pathname !== "/registro" &&
-        pathname !== "/sign-in" &&
         pathname !== "/loader" && <NavBar />}
         
      <DarkMode />
       <Routes>
         <Route path="/protected" element={<Protected />} />
-        <Route
-          path="/sign-in"
-          element={
-            <div className="flex justify-center items-center h-screen">
-              <SignIn />
-            </div>
-          }
-        />
+        <Route path="/signIn" element={<SignIn />} />
         <Route path="/" element={<Login />} />
         <Route path="/loader" element={<Loading />} />
         <Route path="/registro" element={<RegisterUser />} />
         <Route path="/crear" element={<Crear />} />
+        <Route path="/crear/registro" element={<RegisterUserAuth />} />
         <Route path="/crear/username" element={<RegistroUserName />} />
         <Route path="/crear/pagina" element={<RegistrarPagina />} />
         <Route path="/crear/producto" element={<RegistrarProducto />} />
@@ -149,7 +87,6 @@ function App() {
         <Route path="/crear/ubicacion" element={<RegisterUbicacion />} />
         <Route path="/crear/compras" element={<RegisterCompras />} />
         <Route path="/crear/prestamos" element={<Prestamos />} />
-        {/* <Route path="/crear/rojos" element={<RegisterRojos />} /> */}
         <Route
           path="/crear/ralacion"
           element={<RelationUbicationAndPorcenaje />}
@@ -158,16 +95,13 @@ function App() {
         <Route path="/editar/username/:id" element={<UserName />} />
         <Route path="/editar/user/:id" element={<UserEdit />} />
         <Route path="/editar/prestamo/:id" element={<Prestamo />} />
-        <Route path="/user/:id" element={<User />} />
+        <Route path="/user/:session" element={<User />} />
         <Route path="/modelo" element={<Modelos />} />
-        <Route path="/modelo/:id" element={<DetailUser />} />
+        <Route path="/modelo/:session" element={<DetailUser />} />
         <Route path="/modelo/comment/:id" element={<RegistrarComment />} />
         <Route path="/home" element={<Home />} />
         <Route path="/ventas" element={<Ventas />} />
-        <Route
-          path="/sign-up/*"
-          element={<SignUp routing="path" path="/sign-up" />}
-        />
+
         //* paginas
         {/* <Route path="/estadisticas" element={<Estadisticas />} /> */}
         <Route
@@ -196,7 +130,6 @@ function App() {
         <Route path="/estadisticas/carga/vx" element={<Vx />} />
         <Route path="/estadisticas/carga/xlove" element={<Xlove />} />
         <Route path="/estadisticas/carga/xlovenueva" element={<XloveNueva />} />
-        {/* <Route path="/registrod" element={<Registro />} /> */}
       </Routes>
     </div>
   );

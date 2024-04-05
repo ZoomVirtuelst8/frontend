@@ -15,11 +15,15 @@ const PRODUCTO = import.meta.env.VITE_REACT_APP_URL_PRODUCTO;
 const PRODUCTOS = import.meta.env.VITE_REACT_APP_URL_PRODUCTOS;
 const DELETE = import.meta.env.VITE_REACT_APP_URL_DELETE;
 
-export const postProducto = (producto) => {
+export const postProducto = (producto, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PRODUCTO}`;
-      const { data } = await axios.post(endpoint, producto);
+      const { data } = await axios.post(endpoint, producto, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: POSTPRODUCTO,
         payload: data,
@@ -33,11 +37,15 @@ export const postProducto = (producto) => {
   };
 };
 
-export const searchProducto = () => {
+export const searchProducto = (token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PRODUCTOS}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: SEARCHPRODUCTO,
         payload: data,
@@ -51,11 +59,15 @@ export const searchProducto = () => {
   };
 };
 
-export const getAllProductos = () => {
+export const getAllProductos = (token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PRODUCTO}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: GETPRODUCTO,
         payload: data,
@@ -69,11 +81,15 @@ export const getAllProductos = () => {
   };
 };
 
-export const getProductoById = (id) => {
+export const getProductoById = (id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PRODUCTO}/${id}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: GETBIPRODUCTO,
         payload: data,
@@ -87,11 +103,15 @@ export const getProductoById = (id) => {
   };
 };
 
-export const updateProducto = (editProduct) => {
+export const updateProducto = (editProduct, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PRODUCTO}/${editProduct.id}`;
-      const { data } = await axios.put(endpoint, editProduct);
+      const { data } = await axios.put(endpoint, editProduct, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: UPDATEPRODUCTO,
         payload: data,
@@ -105,11 +125,15 @@ export const updateProducto = (editProduct) => {
   };
 };
 
-export const deleteProducto = (id) => {
+export const deleteProducto = (id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PRODUCTO}/${DELETE}/${id}`;
-      const { data } = await axios.delete(endpoint);
+      const { data } = await axios.delete(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: DELETEPRODUCTO,
         payload: data,

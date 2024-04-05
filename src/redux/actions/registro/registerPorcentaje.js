@@ -13,11 +13,15 @@ const URL = import.meta.env.VITE_REACT_APP_URL;
 const PORCENTAJE = import.meta.env.VITE_REACT_APP_URL_PORCENTAJE;
 const DELETE = import.meta.env.VITE_REACT_APP_URL_DELETE;
 
-export const postPorcentaje = (porcentajes) => {
+export const postPorcentaje = (porcentajes, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PORCENTAJE}`;
-      const { data } = await axios.post(endpoint, porcentajes);
+      const { data } = await axios.post(endpoint, porcentajes, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: POSTPORCENTAJE,
         payload: data,
@@ -31,11 +35,15 @@ export const postPorcentaje = (porcentajes) => {
   };
 };
 
-export const getAllPorcentaje = () => {
+export const getAllPorcentaje = (token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PORCENTAJE}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: GETALLPORCENTAJE,
         payload: data,
@@ -49,11 +57,15 @@ export const getAllPorcentaje = () => {
   };
 };
 
-export const getPorcentajeById = (id) => {
+export const getPorcentajeById = (id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PORCENTAJE}/${id}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: GETPORCENTAJEBYID,
         payload: data,
@@ -67,11 +79,15 @@ export const getPorcentajeById = (id) => {
   };
 };
 
-export const updatePorcentaje = (id, nPorcentajes) => {
+export const updatePorcentaje = (id, nPorcentajes, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PORCENTAJE}/${id}`;
-      const { data } = await axios.put(endpoint, nPorcentajes);
+      const { data } = await axios.put(endpoint, nPorcentajes, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: UPDATEPORCENTAJE,
         payload: data,
@@ -85,11 +101,15 @@ export const updatePorcentaje = (id, nPorcentajes) => {
   };
 };
 
-export const deletePorcentaje = (id) => {
+export const deletePorcentaje = (id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PORCENTAJE}/${DELETE}/${id}`;
-      const { data } = await axios.delete(endpoint);
+      const { data } = await axios.delete(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: DELETEPORCENTAJE,
         payload: data,

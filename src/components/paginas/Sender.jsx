@@ -14,12 +14,14 @@ const Sender = () => {
   const [input, setInput] = useState([]);
   const [cose, setCose] = useState(input);
   const quincenas = useSelector((state) => state.quincenas);
+  const token = useSelector((state) => state.token);
+
   const [id, setId] = useState("");
   useEffect(() => {
     setInput([]);
   }, [id]);
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
 
   useEffect(() => {
@@ -92,7 +94,7 @@ const Sender = () => {
   };
 
   const handlerSubmit = () => {
-    dispatch(pse(cose));
+    dispatch(pse(cose, token));
     setInput([]);
     setCose([]);
   };

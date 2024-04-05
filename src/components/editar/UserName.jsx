@@ -6,6 +6,7 @@ import { MdOutlineSaveAs } from "react-icons/md";
 const UserName = () => {
   const navigate = useNavigate()
   const userName = useSelector((state) => state.userName);
+  const token = useSelector((state) => state.token);
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -15,7 +16,7 @@ const UserName = () => {
   });
 
   useEffect(() => {
-    dispatch(getUserNameById(id));
+    dispatch(getUserNameById(id, token));
   }, [dispatch, id]);
 
   // Función para manejar cambios en el input de edición
@@ -27,7 +28,7 @@ const UserName = () => {
 
   // Función para manejar la actualización del nombre de usuario
   const handleUpdateUserName = () => {
-    dispatch(updateUserName(id, editedUserName));
+    dispatch(updateUserName(id, editedUserName, token));
     navigate('/modelo');
   };
 

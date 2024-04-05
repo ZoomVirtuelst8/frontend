@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GrEdit } from "react-icons/gr";
+import { GoPencil } from "react-icons/go";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineSaveAs } from "react-icons/md";
 import {
@@ -11,10 +11,12 @@ import {
 
 const Productos = () => {
   const productos = useSelector((state) => state.productos);
+  const token = useSelector((state) => state.token);
+
   const dispatch = useDispatch();
   const [editProduct, setEditProduct] = useState(null);
   useEffect(() => {
-    dispatch(getAllProductos());
+    dispatch(getAllProductos(token));
   }, [dispatch]);
 
   const handleEditProduct = (producto) => {
@@ -22,21 +24,21 @@ const Productos = () => {
   };
 
   const handleSaveChanges = () => {
-    dispatch(updateProducto(editProduct));
+    dispatch(updateProducto(editProduct, token));
     setEditProduct(null);
   };
 const handleDelete = (id) => {
-  dispatch(deleteProducto(id))
+  dispatch(deleteProducto(id, token))
 }
   return (
-    <div className="contenedor1">
-      <div className="contenedor2">
+    <div className="contenedor">
+      <div className="contenedor1">
         <div className="divTitulo">
           <h1 className="titulo">PRODUCTOS</h1>
         </div>
 
         {productos && (
-          <div className="grid grid-cols-4 px-2 m-2">
+          <div className="grid md:grid-cols-4 sm:grid-cols-1 px-2 m-2">
             {productos?.map((producto) => {
               return (
                 <div
@@ -57,7 +59,7 @@ const handleDelete = (id) => {
                             nombre: e.target.value,
                           })
                         }
-                        className="inputEdit"
+                        className="input"
                       />
                       <input
                         value={editProduct.descripcion}
@@ -67,6 +69,7 @@ const handleDelete = (id) => {
                             descripcion: e.target.value,
                           })
                         }
+                        className="input"
                       />
                       <input
                         type="text"
@@ -77,21 +80,21 @@ const handleDelete = (id) => {
                             imagen: e.target.value,
                           })
                         }
-                        className="inputEdit"
+                        className="input"
                       />
-                      <button onClick={handleSaveChanges} className="btn-n">
+                      <button onClick={handleSaveChanges} className="btns">
                         <MdOutlineSaveAs className="text-2xl" />
                       </button>
                     </div>
                   ) : (
                     <section className="flex justify-between items-center mx-6">
                       <button
-                        className="btn-n"
+                        className="btns"
                         onClick={() => handleEditProduct(producto)}
                       >
-                        <GrEdit className="text-2xl" />
+                        <GoPencil  className="text-2xl" />
                       </button>
-                      <button className="btn-n " onClick={() => handleDelete(producto.id)}>
+                      <button className="btns" onClick={() => handleDelete(producto.id)}>
                         <RiDeleteBin6Line className="text-2xl" />
                       </button>
                     </section>

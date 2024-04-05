@@ -13,12 +13,14 @@ const Mondo = () => {
   const reporte = useSelector((state) => state.spg);
   const errors = useSelector((state) => state.error);
   const quincenas = useSelector((state) => state.quincenas);
+  const token = useSelector((state) => state.token);
+
   const [input, setInput] = useState([]);
   const [mondo, setMondo] = useState(input);
   const [id, setId] = useState("");
 
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
   useEffect(() => {
     setInput([])
@@ -77,7 +79,7 @@ const Mondo = () => {
   };
   
   const handleSubmit = () => {
-    dispatch(postMondo(mondo));
+    dispatch(postMondo(mondo, token));
     setInput([]);
     setMondo([]);
   };

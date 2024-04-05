@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Moneda from "../resource/Moneda.jsx";
 import { BiSend } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { GrEdit } from "react-icons/gr";
 
 import { resetError } from "../../redux/actions/resetError.js";
 import {
@@ -16,25 +17,29 @@ import { deleteBonga } from "../../redux/actions/paginas/bonga.js";
 import { deleteStreamate } from "../../redux/actions/paginas/streamate.js";
 import { deletePrestamos } from "../../redux/actions/registro/registerPrestamos.js";
 import { deleteVenta } from "../../redux/actions/registro/registerVenta.js";
+import ButtonFoto from "../resource/ButtonFoto.jsx";
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const quincenas = useSelector((state) => state.quincenas);
   const quincenaHome = useSelector((state) => state.quincenaHome);
+  const token = useSelector((state) => state.token);
+  const perror = useSelector((state) => state.perror);
+  const gerror = useSelector((state) => state.gerror);
   const [id, setId] = useState("");
   const [rojo, setRojo] = useState([]);
   useEffect(() => {
-    dispatch(resetError());
+    dispatch(resetError(token));
   }, [id]);
 
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
 
   useEffect(() => {
     if (id) {
-      dispatch(searchAllUserByFortnight(id));
+      dispatch(searchAllUserByFortnight(id, token));
     }
   }, [dispatch, id]);
 
@@ -237,6 +242,14 @@ const Home = () => {
       ...prevShowDetail,
       [modeloId]: false,
     }));
+    setShowBonga((prevShowBonga) => ({
+      ...prevShowBonga,
+      [modeloId]: false,
+    }));
+    setShowStreamate((prevShowStreamate) => ({
+      ...prevShowStreamate,
+      [modeloId]: false,
+    }));
     setShowPrestamos((prevShowPrestamos) => ({
       ...prevShowPrestamos,
       [modeloId]: false,
@@ -267,13 +280,13 @@ const Home = () => {
   };
 
   const handleDeleteAdult = (id) => {
-    dispatch(deleteCorte(id));
+    dispatch(deleteCorte(id, token));
   };
   const handleDeleteBonga = (id) => {
-    dispatch(deleteBonga(id));
+    dispatch(deleteBonga(id, token));
   };
   const handleDeleteStreamate = (id) => {
-    dispatch(deleteStreamate(id));
+    dispatch(deleteStreamate(id, token));
   };
 
   const handleShowPrestamos = (modeloId) => {
@@ -309,7 +322,7 @@ const Home = () => {
 
   const handleRojo = () => {
     if (rojo.length >= 1) {
-      dispatch(postRojo(rojo));
+      dispatch(postRojo(rojo, token));
       setRojo([]);
     }
   };
@@ -327,18 +340,21 @@ const Home = () => {
     showRojos ? setShowRojos(false) : setShowRojos(true);
   };
   const handleDeletePrestamo = (id) => {
-    dispatch(deletePrestamos(id));
+    dispatch(deletePrestamos(id, token));
   };
   const handleDeleteVitrina = (id) => {
-    dispatch(deleteVenta(id));
+    dispatch(deleteVenta(id, token));
   };
   const handleEditPrestamo = (id) => {
     navigate(`/editar/prestamo/${id}`);
   };
+
+  const sectionRef = useRef([]);
+  console.log(quincenaHome)
   return (
     <div className="contenedor1">
       <div className="contenedor2">
-        <div className="mt-2">
+        <div>
           <select onChange={handleQuincena} value={id} className="select">
             <option value="" hidden>
               Seleccione Una Quincena
@@ -361,55 +377,51 @@ const Home = () => {
         )}
 
         {showRojos && (
-          <div className="max-w-fit m-4 rounded-xl p-2 bg-red-400 border-4 border-black fixed right-40 bottom-10">
+          <div className="overflow-x-auto px-2 py-2 bg-red-500 dark:bg-red-700 border-4 border-black dark:border-black m-1 ">
+            {" "}
             <h1 className="text-xl font-bold">SALDO ROJO</h1>
-            <table className="min-w-full divide-y-4 divide-black border-4 border-black">
-              <tbody className="bg-red-500 divide-y-2 divide-black">
-                <tr className="text-center bg-red-700 font-bold">
-                  <td className="px-6 py-3 text-lg uppercase tracking-wider">
-                    #
-                  </td>
-                  <td className="px-6 py-3  uppercase tracking-wider">
-                    nombre
-                  </td>
-                  <td className="px-6 py-3  uppercase tracking-wider">
-                    apellido
-                  </td>
-                  <td className="px-6 py-3  uppercase tracking-wider">rojo</td>
-                  <td className="px-6 py-3  uppercase tracking-wider">para</td>
-                </tr>
-                {rojo?.map((x, index) => {
-                  return (
-                    <tr className="font-bold" key={x.id}>
-                      <td className="px-6 py-2 whitespace-nowrap">
-                        {index + 1}
-                      </td>
-                      <td className="px-6 py-2 whitespace-nowrap">
-                        {x?.nombre}
-                      </td>
-                      <td className="px-6 py-2 whitespace-nowrap">
-                        {x?.apellido}
-                      </td>
-                      <td className="px-6 py-2 whitespace-nowrap">
+            <div>
+              {rojo?.map((x, index) => {
+                return (
+                  <section
+                    className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 border-4 border-black dark:border-black p-1 my-1 hover:bg-emerald-400 dark:hover:bg-emerald-800"
+                    key={index}
+                  >
+                    <div className="divPageRojo">
+                      <h1>#</h1>
+                      <h2>{index + 1}</h2>
+                    </div>
+                    <div className="divPageRojo">
+                      <h1>nombre</h1>
+                      <h2>{x?.nombre}</h2>
+                    </div>
+                    <div className="divPageRojo">
+                      <h1>apellido</h1>
+                      <h2>{x?.apellido}</h2>
+                    </div>
+                    <div className="divPageRojo">
+                      <h1>rojo</h1>
+                      <h2>
                         {Intl.NumberFormat("es-CO", {
                           style: "currency",
                           currency: "COP",
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
                         }).format(x?.rojo)}
-                      </td>
-                      <td className="px-6 py-2 whitespace-nowrap">
-                        {x?.quincenaNombre}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                      </h2>
+                    </div>
+                    <div className="divPageRojo">
+                      <h1>para</h1>
+                      <h2>{x?.quincenaNombre}</h2>
+                    </div>
+                  </section>
+                );
+              })}
+            </div>
             {rojo?.length > 0 && (
               <section className="flex items-center justify-center">
                 <button
-                  className="btn-w w-auto font-bold text-4xl"
+                  className="btns w-auto font-bold text-4xl"
                   onClick={handleRojo}
                 >
                   <BiSend />
@@ -420,7 +432,7 @@ const Home = () => {
         )}
 
         <div className="pb-8">
-          <div className="mx-2 bg-indigo-300 p-2 rounded-2xl border-4 border-indigo-400">
+          <div className="mx-2 bg-indigo-300 dark:bg-slate-600 dark:border-slate-500 p-2 rounded-2xl border-4 border-indigo-400">
             {rojo?.length > 0 && (
               <button className="btn-rojos" onClick={() => handleRojos()}>
                 Generar Rojos
@@ -430,472 +442,217 @@ const Home = () => {
             <div>
               {quincenaHome?.modelos?.map((x) => {
                 if (
-                  x?.userNamePage?.length ||
+                  x?.totales?.saldo !== 0 ||
+                  x?.totales?.rojo !== 0 ||
+                  x?.totales?.totalCreditos > 0 ||
                   x?.totales?.totalPrestamos > 0 ||
                   x?.totales?.totalVitrina > 0
                 )
                   return (
                     <div
                       key={x.id}
-                      className="divPageContainer hover:bg-emerald-300 py-2 px-2"
+                      className="divPageContainer  "
+                      ref={(el) => (sectionRef[x.id] = el)}
                     >
-                      <h1 className="text-2xl font-bold">
-                        {x.nombre} {x.apellido}
-                      </h1>
-                      <table
-                        className="min-w-full divide-y-4 divide-indigo-700 border-4 border-indigo-700"
-                        onClick={() => handleShow(x?.id)}
-                      >
-                        <tbody className="bg-indigo-400 divide-y-2 divide-indigo-700">
-                          <tr className="text-center bg-indigo-600 font-bold">
-                            <td className="px-6 py-3 text-lg uppercase tracking-wider">
-                              Nombre
-                            </td>
-                            <td className="px-6 py-3  uppercase tracking-wider">
-                              Meta
-                            </td>
-                            <td className="px-6 py-3  uppercase tracking-wider">
-                              Total Créditos
-                            </td>
-                            <td className="px-6 py-3  uppercase tracking-wider">
-                              Porcentaje
-                            </td>
-                            <td className="px-6 py-3  uppercase tracking-wider">
-                              rojo
-                            </td>
-                            <td className="px-6 py-3  uppercase tracking-wider">
-                              interes
-                            </td>
-                            <td className="px-6 py-3  uppercase tracking-wider">
-                              Total Prestamos
-                            </td>
-                            <td className="px-6 py-3  uppercase tracking-wider">
-                              Total Vitrina
-                            </td>
-                            <td className="px-6 py-3  uppercase tracking-wider">
-                              Total Pesos
-                            </td>
-                            <td className="px-6 py-3  uppercase tracking-wider">
-                              Saldo
-                            </td>
-                          </tr>
-                          <tr className="font-bold">
-                            <td className="px-6 py-2 whitespace-nowrap">
-                              {x?.porcentaje && (
-                                <h1>{x?.porcentaje?.nombre}</h1>
-                              )}
-                            </td>
-                            <td className="px-6 py-2 whitespace-nowrap">
-                              {x?.porcentaje && (
-                                <h1>{x?.porcentaje?.meta} créditos</h1>
-                              )}
-                            </td>
-                            <td className="px-6 py-2 whitespace-nowrap">
-                              {x?.totales && (
-                                <h1>
-                                  {Intl.NumberFormat("es-IN", {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                  }).format(x?.totales?.totalCreditos)}
-                                </h1>
-                              )}
-                            </td>
-                            <td className="px-6 py-2 whitespace-nowrap">
-                              {x?.totales?.porcentajeFinal && (
-                                <h1>{x?.totales?.porcentajeFinal}%</h1>
-                              )}
-                            </td>
-                            <td className="px-6 py-2 whitespace-nowrap">
-                              {x?.totales?.rojo && (
-                                <h1>
-                                  {Intl.NumberFormat("es-CO", {
-                                    style: "currency",
-                                    currency: "COP",
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                  }).format(x?.totales?.rojo) || 0}
-                                </h1>
-                              )}
-                            </td>
-                            <td className="px-6 py-2 whitespace-nowrap">
-                              {x?.totales?.interes && (
-                                <h1>
-                                  {Intl.NumberFormat("es-CO", {
-                                    style: "currency",
-                                    currency: "COP",
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                  }).format(x?.totales?.interes) || 0}
-                                </h1>
-                              )}
-                            </td>
-                            <td className="px-6 py-2 whitespace-nowrap">
-                              {x?.totales?.totalPrestamos && (
-                                <h1>
-                                  {Intl.NumberFormat("es-CO", {
-                                    style: "currency",
-                                    currency: "COP",
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                  }).format(x?.totales?.totalPrestamos)}
-                                </h1>
-                              )}
-                            </td>
-                            <td className="px-6 py-2 whitespace-nowrap">
-                              {x?.totales?.totalVitrina && (
-                                <h1>
-                                  {Intl.NumberFormat("es-CO", {
-                                    style: "currency",
-                                    currency: "COP",
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                  }).format(x?.totales?.totalVitrina)}
-                                </h1>
-                              )}
-                            </td>
-                            <td className="px-6 py-2 whitespace-nowrap">
-                              {x?.totales?.totalPesos && (
-                                <h1>
-                                  {Intl.NumberFormat("es-CO", {
-                                    style: "currency",
-                                    currency: "COP",
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                  }).format(x?.totales?.totalPesos)}
-                                </h1>
-                              )}
-                            </td>
-                            <td
-                              className={
-                                x?.totales?.saldo > 0
-                                  ? "saldoPositivo px-6 py-2 whitespace-nowrap"
-                                  : "saldoRojo px-6 py-2 whitespace-nowrap"
-                              }
-                            >
-                              {x?.totales?.saldo && (
-                                <h1>
-                                  {Intl.NumberFormat("es-CO", {
-                                    style: "currency",
-                                    currency: "COP",
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                  }).format(x?.totales?.saldo)}
-                                </h1>
-                              )}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                      <div>
+                        <h1 className="text-2xl font-bold">
+                          {x.nombre} {x.apellido}
+                        </h1>
 
-                      {show[x?.id] && x.totales.totalCreditos > 0 && (
-                        <div className="divPages">
-                          {x?.adultworkTotal && (
-                            <section
-                              className="sectionPage1 cursor-pointer"
-                              onClick={() => handleShowDetail(x?.id)}
-                            >
-                              <h1>Adultwork</h1>
-                              <h1>Libras</h1>
-                              <h2>
-                                {Intl.NumberFormat("en-GB", {
-                                  style: "currency",
-                                  currency: "GBP",
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }).format(
-                                  parseFloat(x?.adultworkTotal?.creditos)
-                                )}
-                              </h2>
-                            </section>
-                          )}
-
-                          {x?.amateur && (
-                            <section className="sectionPage1">
-                              <h1>Amateur</h1>
-                              <section className="sectionPage2">
-                                <section>
-                                  <h1>dolares</h1>
-                                  <h2>
-                                    {Intl.NumberFormat("en-US", {
-                                      style: "currency",
-                                      currency: "USD",
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                    }).format(x?.amateur?.dolares)}
-                                  </h2>
-                                </section>
-                                <section>
-                                  <h1>Tokens</h1>
-                                  <h2>
-                                    {Intl.NumberFormat("es-IN", {
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                    }).format(x?.amateur?.tokens)}
-                                  </h2>
-                                </section>
-                              </section>
-                            </section>
-                          )}
-
-                          {x?.bongaTotal && (
-                            <section
-                              className="sectionPage1 cursor-pointer"
-                              onClick={() => handleShowBonga(x?.id)}
-                            >
-                              <h1>Bonga</h1>
-                              <h1>Dolares</h1>
-                              <h2>
-                                {Intl.NumberFormat("en-US", {
-                                  style: "currency",
-                                  currency: "USD",
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }).format(x?.bongaTotal?.dolares)}
-                              </h2>
-                            </section>
-                          )}
-
-                          {x?.cam4 && (
-                            <section className="sectionPage1">
-                              <h1>Cam4</h1>
-                              <h1>Dolares</h1>
-                              <h2>
-                                {Intl.NumberFormat("en-US", {
-                                  style: "currency",
-                                  currency: "USD",
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }).format(x?.cam4?.dolares)}
-                              </h2>
-                            </section>
-                          )}
-
-                          {x?.chaturbate && (
-                            <section className="sectionPage1">
-                              <h1>Chaturbate</h1>
-                              <section className="sectionPage2">
-                                <section>
-                                  <h1>Tokens </h1>
-                                  <h2>
-                                    {Intl.NumberFormat("es-IN", {
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                    }).format(x?.chaturbate?.tokens)}
-                                  </h2>
-                                </section>
-                                <section>
-                                  <h1>Dolares </h1>
-                                  <h2>
-                                    {Intl.NumberFormat("en-US", {
-                                      style: "currency",
-                                      currency: "USD",
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                    }).format(x?.chaturbate?.dolares)}
-                                  </h2>
-                                </section>
-                              </section>
-                            </section>
-                          )}
-
-                          {x?.dirty && (
-                            <section className="sectionPage1">
-                              <h1>Dirty</h1>
+                        <section
+                          className=" my-2 grid sm:grid-cols-2 sm:text-sm md:grid-cols-5 lg:grid-cols-10 uppercase"
+                          onClick={() => handleShow(x?.id)}
+                        >
+                          {/*//? nombre porcentaje */}
+                          <div className="dht">
+                            <h1 className="py-2">porcentaje</h1>
+                            {x?.porcentaje && <h2>{x?.porcentaje?.nombre}</h2>}
+                          </div>
+                          {/*//? meta */}
+                          <div className="dht">
+                            <h1>meta</h1>
+                            {x?.porcentaje && (
                               <h1>
-                                {x?.dirty?.moneda === "euro"
-                                  ? "Euros"
-                                  : "Dolar"}
+                                {Intl.NumberFormat("es-IN", {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }).format(x?.porcentaje?.meta)}
                               </h1>
-                              <h2>{x?.dirty?.plata}</h2>
-                            </section>
-                          )}
-
-                          {x?.islive && (
-                            <section className="sectionPage1">
-                              <h1>Is Live</h1>
-                              <h1>Euros</h1>
-                              <h2>
-                                {Intl.NumberFormat("es-EU", {
-                                  style: "currency",
-                                  currency: "EUR",
+                            )}
+                          </div>
+                          {/*//? total creditos */}
+                          <div className="dht">
+                            <h1>total creditos</h1>
+                            {x?.totales && (
+                              <h1>
+                                {Intl.NumberFormat("es-IN", {
                                   minimumFractionDigits: 2,
                                   maximumFractionDigits: 2,
-                                }).format(x?.islive?.euros)}
-                              </h2>
-                            </section>
-                          )}
+                                }).format(x?.totales?.totalCreditos)}
+                              </h1>
+                            )}
+                          </div>
+                          {/* //? porcentaje */}
+                          <div className="dht">
+                            <h1>porcentaje</h1>
+                            {x?.totales?.porcentajeFinal && (
+                              <h1>{x?.totales?.porcentajeFinal}%</h1>
+                            )}
+                          </div>
 
-                          {x?.mondo && (
-                            <section className="sectionPage1">
-                              <h1>Mondo</h1>
-                              <h1>Euros</h1>
-                              <h2>
-                                {Intl.NumberFormat("es-EU", {
+                          {/* //? rojo */}
+                          <div className="dht">
+                            <h1>rojo</h1>
+                            {x?.totales?.rojo && (
+                              <h1>
+                                {Intl.NumberFormat("es-CO", {
                                   style: "currency",
-                                  currency: "EUR",
+                                  currency: "COP",
                                   minimumFractionDigits: 2,
                                   maximumFractionDigits: 2,
-                                }).format(x?.mondo?.euros)}
-                              </h2>
-                            </section>
-                          )}
+                                }).format(x?.totales?.rojo) || 0}
+                              </h1>
+                            )}
+                          </div>
 
-                          {x?.myFreeCams && (
-                            <section className="sectionPage1">
-                              <h1>My Free Cams</h1>
-                              <section className="sectionPage2">
-                                <section>
-                                  <h1>Dolares</h1>
-                                  <h2>
-                                    {Intl.NumberFormat("en-US", {
-                                      style: "currency",
-                                      currency: "USD",
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                    }).format(x?.myFreeCams?.dolares)}
-                                  </h2>
-                                </section>
-                                <section>
-                                  <h1>Tokens</h1>
-                                  <h2>
-                                    {Intl.NumberFormat("es-IN", {
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                    }).format(x?.myFreeCams?.tokens)}
-                                  </h2>
-                                </section>
+                          {/* //? intereses */}
+                          <div className="dht">
+                            <h1>interes</h1>
+                            {x?.totales?.interes && (
+                              <h1>
+                                {Intl.NumberFormat("es-CO", {
+                                  style: "currency",
+                                  currency: "COP",
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }).format(x?.totales?.interes) || 0}
+                              </h1>
+                            )}
+                          </div>
+
+                          {/* //? total prestamos */}
+                          <div className="dht">
+                            <h1>total prestamos</h1>
+                            {x?.totales?.totalPrestamos && (
+                              <h1>
+                                {Intl.NumberFormat("es-CO", {
+                                  style: "currency",
+                                  currency: "COP",
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }).format(x?.totales?.totalPrestamos)}
+                              </h1>
+                            )}
+                          </div>
+
+                          {/* //? total vitrina */}
+                          <div className="dht">
+                            <h1>total vitrina</h1>
+                            {x?.totales?.totalVitrina && (
+                              <h1>
+                                {Intl.NumberFormat("es-CO", {
+                                  style: "currency",
+                                  currency: "COP",
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }).format(x?.totales?.totalVitrina)}
+                              </h1>
+                            )}
+                          </div>
+
+                          {/* //? total pesos */}
+                          <div className="dht">
+                            <h1>total pesos</h1>
+                            {x?.totales?.totalPesos && (
+                              <h1>
+                                {Intl.NumberFormat("es-CO", {
+                                  style: "currency",
+                                  currency: "COP",
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }).format(x?.totales?.totalPesos)}
+                              </h1>
+                            )}
+                          </div>
+
+                          {/* //? saldo */}
+                          <div
+                            className={
+                              x?.totales?.saldo > 0
+                                ? "saldoPositivo p-3 border-2 border-indigo-700 dark:border-slate-400 m-0.5"
+                                : "saldoRojo p-3 border-2 border-indigo-700 dark:border-slate-400 m-0.5"
+                            }
+                          >
+                            <h1>saldo</h1>
+                            {x?.totales?.saldo && (
+                              <h1>
+                                {Intl.NumberFormat("es-CO", {
+                                  style: "currency",
+                                  currency: "COP",
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }).format(x?.totales?.saldo)}
+                              </h1>
+                            )}
+                          </div>
+                        </section>
+
+                        {show[x?.id] && x?.totales?.saldo !== 0 && (
+                          <div className="divPages">
+                            {x?.adultworkTotal && (
+                              <section
+                                className="sectionPage1 cursor-pointer"
+                                onClick={() => handleShowDetail(x?.id)}
+                              >
+                                <h1>Adultwork</h1>
+                                <h1>Libras</h1>
+                                <h2>
+                                  {Intl.NumberFormat("en-GB", {
+                                    style: "currency",
+                                    currency: "GBP",
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }).format(
+                                    parseFloat(x?.adultworkTotal?.creditos)
+                                  )}
+                                </h2>
                               </section>
-                            </section>
-                          )}
+                            )}
 
-                          {x?.sakura && (
-                            <section className="sectionPage1">
-                              <h1>Sakura</h1>
-                              <h1>Dolares</h1>
-                              <h2>
-                                {Intl.NumberFormat("en-US", {
-                                  style: "currency",
-                                  currency: "USD",
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }).format(x?.sakura?.dolares)}
-                              </h2>
-                            </section>
-                          )}
-
-                          {x?.sender && (
-                            <section className="sectionPage1">
-                              <h1>Sender</h1>
-                              <section>
+                            {x?.amateur && (
+                              <section className="sectionPage1">
+                                <h1>Amateur</h1>
                                 <section className="sectionPage2">
-                                  <h1>Euros</h1>
-                                  <h2>
-                                    {Intl.NumberFormat("es-EU", {
-                                      style: "currency",
-                                      currency: "EUR",
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                    }).format()}
-                                  </h2>
-                                </section>
-                                <section className="sectionPage2">
-                                  <h1>Tokens</h1>
-                                  <h2>
-                                    {Intl.NumberFormat("es-IN", {
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                    }).format(
-                                      x?.senderAnterior?.coins
-                                        ? x?.sender?.coins -
-                                            x?.senderAnterior?.coins
-                                        : x?.sender?.coins
-                                    )}
-                                  </h2>
+                                  <section>
+                                    <h1>dolares</h1>
+                                    <h2>
+                                      {Intl.NumberFormat("en-US", {
+                                        style: "currency",
+                                        currency: "USD",
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      }).format(x?.amateur?.dolares)}
+                                    </h2>
+                                  </section>
+                                  <section>
+                                    <h1>Tokens</h1>
+                                    <h2>
+                                      {Intl.NumberFormat("es-IN", {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      }).format(x?.amateur?.tokens)}
+                                    </h2>
+                                  </section>
                                 </section>
                               </section>
-                            </section>
-                          )}
+                            )}
 
-                          {x?.skype && (
-                            <section className="sectionPage1">
-                              <h1>Skype</h1>
-                              <h1>Dolares</h1>
-                              <h2>
-                                {Intl.NumberFormat("en-US", {
-                                  style: "currency",
-                                  currency: "USD",
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }).format(x?.skype?.dolares)}
-                              </h2>
-                            </section>
-                          )}
-
-                          {x?.streamate && (
-                            <section
-                              className="sectionPage1 cursor-pointer"
-                              onClick={() => handleShowStreamate(x?.id)}
-                            >
-                              <h1>Streamate</h1>
-                              <h1>Dolares</h1>
-                              <h2>
-                                {Intl.NumberFormat("en-US", {
-                                  style: "currency",
-                                  currency: "USD",
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }).format(x?.streamateTotal?.dolares)}
-                              </h2>
-                            </section>
-                          )}
-
-                          {x?.streamRay && (
-                            <section className="sectionPage1">
-                              <h1>StreamRay</h1>
-                              <h1>Dolares</h1>
-                              <h2>
-                                {Intl.NumberFormat("en-US", {
-                                  style: "currency",
-                                  currency: "USD",
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }).format(x?.streamRay?.dolares)}
-                              </h2>
-                            </section>
-                          )}
-
-                          {x?.stripchat && (
-                            <section className="sectionPage1">
-                              <h1>Stripchat</h1>
-                              <section className="sectionPage2">
-                                <section>
-                                  <h1>Dolares</h1>
-                                  <h2>
-                                    {Intl.NumberFormat("en-US", {
-                                      style: "currency",
-                                      currency: "USD",
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                    }).format(x?.stripchat?.dolares)}
-                                  </h2>
-                                </section>
-                                <section>
-                                  <h1>Tokens</h1>
-                                  <h2>
-                                    {Intl.NumberFormat("es-IN", {
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                    }).format(x?.stripchat?.tokens)}
-                                  </h2>
-                                </section>
-                              </section>
-                            </section>
-                          )}
-
-                          {x?.tripleSiete && (
-                            <section className="sectionPage1">
-                              <h1>777</h1>
-                              <section>
+                            {x?.bongaTotal && (
+                              <section
+                                className="sectionPage1 cursor-pointer"
+                                onClick={() => handleShowBonga(x?.id)}
+                              >
+                                <h1>Bonga</h1>
                                 <h1>Dolares</h1>
                                 <h2>
                                   {Intl.NumberFormat("en-US", {
@@ -903,561 +660,678 @@ const Home = () => {
                                     currency: "USD",
                                     minimumFractionDigits: 2,
                                     maximumFractionDigits: 2,
-                                  }).format(x?.tripleSiete?.dolares)}
+                                  }).format(x?.bongaTotal?.dolares)}
                                 </h2>
                               </section>
-                            </section>
-                          )}
+                            )}
 
-                          {x?.vx && (
-                            <section className="sectionPage1">
-                              <h1>Vx</h1>
-                              <h1>Euros</h1>
-                              <h2>
-                                {Intl.NumberFormat("es-EU", {
-                                  style: "currency",
-                                  currency: "EUR",
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }).format(x?.vx?.euros)}
-                              </h2>
-                            </section>
-                          )}
+                            {x?.cam4 && (
+                              <section className="sectionPage1">
+                                <h1>Cam4</h1>
+                                <h1>Dolares</h1>
+                                <h2>
+                                  {Intl.NumberFormat("en-US", {
+                                    style: "currency",
+                                    currency: "USD",
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }).format(x?.cam4?.dolares)}
+                                </h2>
+                              </section>
+                            )}
 
-                          {x?.xlove && (
-                            <section className="sectionPage1">
-                              <h1>Xlove</h1>
-                              <h1>Euros</h1>
-                              <h2>
-                                {Intl.NumberFormat("es-EU", {
-                                  style: "currency",
-                                  currency: "EUR",
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }).format(x?.xlove?.euros)}
-                              </h2>
-                            </section>
-                          )}
-
-                          {x?.xlovenueva && (
-                            <section className="sectionPage1">
-                              <h1>Xlove Nueva</h1>
-                              <h1>Euros</h1>
-                              <h2>
-                                {Intl.NumberFormat("es-EU", {
-                                  style: "currency",
-                                  currency: "EUR",
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }).format(x?.xlovenueva?.euros)}
-                              </h2>
-                              {/* <h1>Fecha</h1> <h2>{x?.xlovenueva?.fecha}</h2> */}
-                            </section>
-                          )}
-
-                          {x?.prestamos && (
-                            <section
-                              className="sectionPage1"
-                              onClick={() => handleShowPrestamos(x?.id)}
-                            >
-                              <h1>Prestamos</h1>
-                              <section className="sectionPage2">
-                                <section>
-                                  <h1>Total</h1>
-                                  <h2>
-                                    {Intl.NumberFormat("es-CP", {
-                                      style: "currency",
-                                      currency: "COP",
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                    }).format(x?.totales?.totalPrestamos)}
-                                  </h2>
-                                </section>
-                                <section>
-                                  <h1>Cantidad</h1>
-                                  <h2>{x?.prestamos.length}</h2>
+                            {x?.chaturbate && (
+                              <section className="sectionPage1">
+                                <h1>Chaturbate</h1>
+                                <section className="sectionPage2">
+                                  <section>
+                                    <h1>Tokens </h1>
+                                    <h2>
+                                      {Intl.NumberFormat("es-IN", {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      }).format(x?.chaturbate?.tokens)}
+                                    </h2>
+                                  </section>
+                                  <section>
+                                    <h1>Dolares </h1>
+                                    <h2>
+                                      {Intl.NumberFormat("en-US", {
+                                        style: "currency",
+                                        currency: "USD",
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      }).format(x?.chaturbate?.dolares)}
+                                    </h2>
+                                  </section>
                                 </section>
                               </section>
-                            </section>
-                          )}
-                          {x?.vitrina && (
-                            <section
-                              className="sectionPage1"
-                              onClick={() => handleShowVitrina(x?.id)}
-                            >
-                              <h1>Vitrina</h1>
-                              <section className="sectionPage2">
-                                <section>
-                                  <h1>Total</h1>
-                                  <h2>
-                                    {Intl.NumberFormat("es-CP", {
-                                      style: "currency",
-                                      currency: "COP",
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                    }).format(x?.totales?.totalVitrina)}
-                                  </h2>
-                                </section>
-                                <section>
-                                  <h1>Cantidad</h1> <h2>{x?.vitrina.length}</h2>
+                            )}
+
+                            {x?.dirty && (
+                              <section className="sectionPage1">
+                                <h1>Dirty</h1>
+                                <h1>
+                                  {x?.dirty?.moneda === "euro"
+                                    ? "Euros"
+                                    : "Dolar"}
+                                </h1>
+                                <h2>{x?.dirty?.plata}</h2>
+                              </section>
+                            )}
+
+                            {x?.islive && (
+                              <section className="sectionPage1">
+                                <h1>Is Live</h1>
+                                <h1>Euros</h1>
+                                <h2>
+                                  {Intl.NumberFormat("es-EU", {
+                                    style: "currency",
+                                    currency: "EUR",
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }).format(x?.islive?.euros)}
+                                </h2>
+                              </section>
+                            )}
+
+                            {x?.mondo && (
+                              <section className="sectionPage1">
+                                <h1>Mondo</h1>
+                                <h1>Euros</h1>
+                                <h2>
+                                  {Intl.NumberFormat("es-EU", {
+                                    style: "currency",
+                                    currency: "EUR",
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }).format(x?.mondo?.euros)}
+                                </h2>
+                              </section>
+                            )}
+
+                            {x?.myFreeCams && (
+                              <section className="sectionPage1">
+                                <h1>My Free Cams</h1>
+                                <section className="sectionPage2">
+                                  <section>
+                                    <h1>Dolares</h1>
+                                    <h2>
+                                      {Intl.NumberFormat("en-US", {
+                                        style: "currency",
+                                        currency: "USD",
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      }).format(x?.myFreeCams?.dolares)}
+                                    </h2>
+                                  </section>
+                                  <section>
+                                    <h1>Tokens</h1>
+                                    <h2>
+                                      {Intl.NumberFormat("es-IN", {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      }).format(x?.myFreeCams?.tokens)}
+                                    </h2>
+                                  </section>
                                 </section>
                               </section>
-                            </section>
-                          )}
-                        </div>
-                      )}
+                            )}
+
+                            {x?.sakura && (
+                              <section className="sectionPage1">
+                                <h1>Sakura</h1>
+                                <h1>Dolares</h1>
+                                <h2>
+                                  {Intl.NumberFormat("en-US", {
+                                    style: "currency",
+                                    currency: "USD",
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }).format(x?.sakura?.dolares)}
+                                </h2>
+                              </section>
+                            )}
+
+                            {x?.sender && (
+                              <section className="sectionPage1">
+                                <h1>Sender</h1>
+                                <section>
+                                  <section className="sectionPage2">
+                                    <h1>Euros</h1>
+                                    <h2>
+                                      {Intl.NumberFormat("es-EU", {
+                                        style: "currency",
+                                        currency: "EUR",
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      }).format(x?.senderAnterior?parseFloat(x?.sender?.euros - x?.senderAnterior?.euros):x?.sender?.euros)}
+                                    </h2>
+                                  </section>
+                                  <section className="sectionPage2">
+                                    <h1>Tokens</h1>
+                                    <h2>
+                                      {Intl.NumberFormat("es-IN", {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      }).format(
+                                        x?.senderAnterior?.coins
+                                          ? x?.sender?.coins -
+                                              x?.senderAnterior?.coins
+                                          : x?.sender?.coins
+                                      )}
+                                    </h2>
+                                  </section>
+                                </section>
+                              </section>
+                            )}
+
+                            {x?.skype && (
+                              <section className="sectionPage1">
+                                <h1>Skype</h1>
+                                <h1>Dolares</h1>
+                                <h2>
+                                  {Intl.NumberFormat("en-US", {
+                                    style: "currency",
+                                    currency: "USD",
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }).format(x?.skype?.dolares)}
+                                </h2>
+                              </section>
+                            )}
+
+                            {x?.streamate && (
+                              <section
+                                className="sectionPage1 cursor-pointer"
+                                onClick={() => handleShowStreamate(x?.id)}
+                              >
+                                <h1>Streamate</h1>
+                                <h1>Dolares</h1>
+                                <h2>
+                                  {Intl.NumberFormat("en-US", {
+                                    style: "currency",
+                                    currency: "USD",
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }).format(x?.streamateTotal?.dolares)}
+                                </h2>
+                              </section>
+                            )}
+
+                            {x?.streamRay && (
+                              <section className="sectionPage1">
+                                <h1>StreamRay</h1>
+                                <h1>Dolares</h1>
+                                <h2>
+                                  {Intl.NumberFormat("en-US", {
+                                    style: "currency",
+                                    currency: "USD",
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }).format(x?.streamRay?.dolares)}
+                                </h2>
+                              </section>
+                            )}
+
+                            {x?.stripchat && (
+                              <section className="sectionPage1">
+                                <h1>Stripchat</h1>
+                                <section className="sectionPage2">
+                                  <section>
+                                    <h1>Dolares</h1>
+                                    <h2>
+                                      {Intl.NumberFormat("en-US", {
+                                        style: "currency",
+                                        currency: "USD",
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      }).format(x?.stripchat?.dolares)}
+                                    </h2>
+                                  </section>
+                                  <section>
+                                    <h1>Tokens</h1>
+                                    <h2>
+                                      {Intl.NumberFormat("es-IN", {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      }).format(x?.stripchat?.tokens)}
+                                    </h2>
+                                  </section>
+                                </section>
+                              </section>
+                            )}
+
+                            {x?.tripleSiete && (
+                              <section className="sectionPage1">
+                                <h1>777</h1>
+                                <section>
+                                  <h1>Dolares</h1>
+                                  <h2>
+                                    {Intl.NumberFormat("en-US", {
+                                      style: "currency",
+                                      currency: "USD",
+                                      minimumFractionDigits: 2,
+                                      maximumFractionDigits: 2,
+                                    }).format(x?.tripleSiete?.dolares)}
+                                  </h2>
+                                </section>
+                              </section>
+                            )}
+
+                            {x?.vx && (
+                              <section className="sectionPage1">
+                                <h1>Vx</h1>
+                                <h1>Euros</h1>
+                                <h2>
+                                  {Intl.NumberFormat("es-EU", {
+                                    style: "currency",
+                                    currency: "EUR",
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }).format(x?.vx?.euros)}
+                                </h2>
+                              </section>
+                            )}
+
+                            {x?.xlove && (
+                              <section className="sectionPage1">
+                                <h1>Xlove</h1>
+                                <h1>Euros</h1>
+                                <h2>
+                                  {Intl.NumberFormat("es-EU", {
+                                    style: "currency",
+                                    currency: "EUR",
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }).format(x?.xlove?.euros)}
+                                </h2>
+                              </section>
+                            )}
+
+                            {x?.xlovenueva && (
+                              <section className="sectionPage1">
+                                <h1>Xlove Nueva</h1>
+                                <h1>Euros</h1>
+                                <h2>
+                                  {Intl.NumberFormat("es-EU", {
+                                    style: "currency",
+                                    currency: "EUR",
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }).format(x?.xlovenueva?.euros)}
+                                </h2>
+                                {/* <h1>Fecha</h1> <h2>{x?.xlovenueva?.fecha}</h2> */}
+                              </section>
+                            )}
+
+                            {x?.prestamos && (
+                              <section
+                                className="sectionPage1 cursor-pointer"
+                                onClick={() => handleShowPrestamos(x?.id)}
+                              >
+                                <h1>Prestamos</h1>
+                                <section className="sectionPage2">
+                                  <section>
+                                    <h1>Total</h1>
+                                    <h2>
+                                      {Intl.NumberFormat("es-CO", {
+                                        style: "currency",
+                                        currency: "COP",
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      }).format(x?.totales?.totalPrestamos)}
+                                    </h2>
+                                  </section>
+                                  <section>
+                                    <h1>Cantidad</h1>
+                                    <h2>{x?.prestamos.length}</h2>
+                                  </section>
+                                </section>
+                              </section>
+                            )}
+                            {x?.vitrina && (
+                              <section
+                                className="sectionPage1 cursor-pointer"
+                                onClick={() => handleShowVitrina(x?.id)}
+                              >
+                                <h1>Vitrina</h1>
+                                <section className="sectionPage2">
+                                  <section>
+                                    <h1>Total</h1>
+                                    <h2>
+                                      {Intl.NumberFormat("es-CO", {
+                                        style: "currency",
+                                        currency: "COP",
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      }).format(x?.totales?.totalVitrina)}
+                                    </h2>
+                                  </section>
+                                  <section>
+                                    <h1>Cantidad</h1>{" "}
+                                    <h2>{x?.vitrina.length}</h2>
+                                  </section>
+                                </section>
+                              </section>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <ButtonFoto
+                        sectionRef={sectionRef[x.id]}
+                        nombre={x.nombre}
+                        apellido={x.apellido}
+                        id={x.id}
+                        quincena={quincenaHome?.moneda?.nombre}
+                      />
 
                       {showDetail[x?.id] && (
-                        <div className="overflow-x-auto px-2 py-2">
+                        <div className="overflow-x-auto px-2 py-2 bg-indigo-300 dark:bg-slate-700 border-4 border-indigo-700 dark:border-black m-1 ">
                           <h1 className="text-xl font-bold m-2">
                             CORTES ADULTWORK
                           </h1>
-                          <table className="min-w-full divide-y-4 divide-indigo-700 border-4 border-indigo-700">
-                            <thead className="bg-indigo-600">
-                              <tr>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  #
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  UserName
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  Libras
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  Tipo
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  Fecha Adultwork
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  eliminar
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-indigo-400 divide-y-2 divide-indigo-700">
-                              {x?.adultwork?.map((detalle, index) => (
-                                <tr
-                                  key={detalle?.id}
-                                  className="hover:bg-green-300"
-                                >
-                                  <td className="px-6 py-4 whitespace-nowrap">
-                                    {index + 1}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
-                                    {detalle?.userName}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap font-bold">
+                          <div>
+                            {x?.adultwork?.map((detalle, index) => (
+                              <section
+                                className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-6 border-4 border-indigo-700 dark:border-black p-1 my-1 hover:bg-emerald-400 dark:hover:bg-emerald-800"
+                                key={index}
+                              >
+                                <div className="divPageAdult">
+                                  <h1>#</h1>
+                                  <h2>{index + 1}</h2>
+                                </div>
+                                <div className="divPageAdult">
+                                  <h1>username</h1>
+                                  <h2>{detalle?.userName}</h2>
+                                </div>
+                                <div className="divPageAdult">
+                                  <h1>libras</h1>
+                                  <h2>
                                     {Intl.NumberFormat("en-GB", {
                                       style: "currency",
                                       currency: "GBP",
                                       minimumFractionDigits: 2,
                                       maximumFractionDigits: 2,
                                     }).format(detalle?.creditos)}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap font-bold">
+                                  </h2>
+                                </div>
+                                <div className="divPageAdult">
+                                  <h1>tipo</h1>
+                                  <h2>
                                     {detalle?.parcial ? "Parcial" : "Regular"}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
+                                  </h2>
+                                </div>
+                                <div className="divPageAdult">
+                                  <h1>fecha adultwork</h1>
+                                  <h2>
                                     {detalle?.parcial
                                       ? detalle?.createdAt
                                       : detalle?.fecha}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
+                                  </h2>
+                                </div>
+                                <div className="divPageAdult">
+                                  <h1>eliminar</h1>
+                                  <h2>
                                     <button
-                                      className="btn-n w-10"
+                                      className="btns w-10"
                                       onClick={() =>
                                         handleDeleteAdult(detalle.id)
                                       }
                                     >
                                       <RiDeleteBin6Line className="text-2xl" />
                                     </button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
+                                  </h2>
+                                </div>
+                              </section>
+                            ))}
+                          </div>
                         </div>
                       )}
                       {showBonga[x?.id] && (
-                        <div className="overflow-x-auto px-2 py-2">
+                        <div className="overflow-x-auto px-2 py-2 bg-indigo-300 dark:bg-slate-700 border-4 border-indigo-700 dark:border-black m-1 ">
                           <h1 className="text-xl font-bold m-2">
                             CORTES BONGA
                           </h1>
-                          <table className="min-w-full divide-y-4 divide-indigo-700 border-4 border-indigo-700">
-                            <thead className="bg-indigo-600">
-                              <tr>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  #
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  UserName
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  dolares
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  Fecha Adultwork
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  eliminar
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-indigo-400 divide-y-2 divide-indigo-700">
-                              {x?.bonga?.map((detalle, index) => (
-                                <tr
-                                  key={detalle?.id}
-                                  className="hover:bg-green-300"
-                                >
-                                  <td className="px-6 py-4 whitespace-nowrap">
-                                    {index + 1}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
-                                    {detalle?.userName}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap font-bold">
+                          <div>
+                            {x?.bonga?.map((detalle, index) => (
+                              <section
+                                className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 border-4 border-indigo-700 dark:border-black p-1 my-1 hover:bg-emerald-400 dark:hover:bg-emerald-800"
+                                key={index}
+                              >
+                                <div className="divPageAdult">
+                                  <h1>#</h1>
+                                  <h2>{index + 1}</h2>
+                                </div>
+                                <div className="divPageAdult">
+                                  <h1>username</h1>
+                                  <h2>{detalle?.userName}</h2>
+                                </div>
+                                <div className="divPageAdult">
+                                  <h1>dolares</h1>
+                                  <h2>
                                     {Intl.NumberFormat("en-US", {
                                       style: "currency",
                                       currency: "USD",
                                       minimumFractionDigits: 2,
                                       maximumFractionDigits: 2,
                                     }).format(detalle?.dolares)}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
-                                    {detalle?.fecha}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
+                                  </h2>
+                                </div>
+                                <div className="divPageAdult">
+                                  <h1>fecha bonga</h1>
+                                  <h2>{detalle?.fecha}</h2>
+                                </div>
+                                <div className="divPageAdult">
+                                  <h1>eliminar</h1>
+                                  <h2>
                                     <button
-                                      className="btn-n w-10"
+                                      className="btns"
                                       onClick={() =>
                                         handleDeleteBonga(detalle.id)
                                       }
                                     >
                                       <RiDeleteBin6Line className="text-2xl" />
                                     </button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
+                                  </h2>
+                                </div>
+                              </section>
+                            ))}
+                          </div>
                         </div>
                       )}
                       {showStreamate[x?.id] && (
-                        <div className="overflow-x-auto px-2 py-2">
+                        <div className="overflow-x-auto px-2 py-2 bg-indigo-300 dark:bg-slate-700 border-4 border-indigo-700 dark:border-black m-1 ">
                           <h1 className="text-xl font-bold m-2">
                             CORTES STREAMATE
                           </h1>
-                          <table className="min-w-full divide-y-4 divide-indigo-700 border-4 border-indigo-700">
-                            <thead className="bg-indigo-600">
-                              <tr>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  #
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  UserName
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  dolares
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  Fecha Adultwork
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  eliminar
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-indigo-400 divide-y-2 divide-indigo-700">
-                              {x?.streamate?.map((detalle, index) => (
-                                <tr
-                                  key={detalle?.id}
-                                  className="hover:bg-green-300"
-                                >
-                                  <td className="px-6 py-4 whitespace-nowrap">
-                                    {index + 1}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
-                                    {detalle?.userName}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap font-bold">
+                          <div>
+                            {x?.streamate?.map((detalle, index) => (
+                              <section
+                                className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 border-4 border-indigo-700 dark:border-black p-1 my-1 hover:bg-emerald-400 dark:hover:bg-emerald-800"
+                                key={index}
+                              >
+                                <div className="divPageAdult">
+                                  <h1>#</h1>
+                                  <h2>{index + 1}</h2>
+                                </div>
+                                <div className="divPageAdult">
+                                  <h1>username</h1>
+                                  <h2>{detalle?.userName}</h2>
+                                </div>
+                                <div className="divPageAdult">
+                                  <h1>dolares</h1>
+                                  <h2>
                                     {Intl.NumberFormat("en-US", {
                                       style: "currency",
                                       currency: "USD",
                                       minimumFractionDigits: 2,
                                       maximumFractionDigits: 2,
                                     }).format(detalle?.dolares)}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
-                                    {detalle?.fecha}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
+                                  </h2>
+                                </div>
+                                <div className="divPageAdult">
+                                  <h1>fecha streamate</h1>
+                                  <h2>{detalle?.fecha}</h2>
+                                </div>
+                                <div className="divPageAdult">
+                                  <h1>eliminar</h1>
+                                  <h2>
                                     <button
-                                      className="btn-n w-10"
+                                      className="btns"
                                       onClick={() =>
                                         handleDeleteStreamate(detalle.id)
                                       }
                                     >
                                       <RiDeleteBin6Line className="text-2xl" />
                                     </button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
+                                  </h2>
+                                </div>
+                              </section>
+                            ))}
+                          </div>
                         </div>
                       )}
                       {showPrestamos[x?.id] && (
-                        <div className="overflow-x-auto px-2 py-2">
+                        <div className="overflow-x-auto px-2 py-2 bg-indigo-300 dark:bg-slate-700 border-4 border-indigo-700 dark:border-black m-1 ">
                           <h1 className="text-xl font-bold m-2">
                             PRESTAMOS DETALLADOS
                           </h1>
-                          <table className="min-w-full divide-y-4 divide-indigo-700 border-4 border-indigo-700">
-                            <thead className="bg-indigo-600">
-                              <tr>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
+                          <div>
+                            {x?.prestamos?.map((p, n) => {
+                              const fecha = new Date(p?.createdAt);
+                              const opcionesFecha = {
+                                day: "numeric",
+                                month: "short",
+                                year: "2-digit",
+                              };
+                              const fechaFormateada = fecha.toLocaleDateString(
+                                "es-ES",
+                                opcionesFecha
+                              );
+                              return (
+                                <section
+                                  key={n}
+                                  className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 border-4 border-indigo-700 dark:border-black p-1 my-1 hover:bg-emerald-400 dark:hover:bg-emerald-800"
                                 >
-                                  #
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  Fechas
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-lg uppercase tracking-wider"
-                                >
-                                  Valor
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-lg uppercase tracking-wider"
-                                >
-                                  eliminar
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-indigo-400 divide-y-2 divide-indigo-700">
-                              {x?.prestamos?.map((p, n) => {
-                                const fecha = new Date(p?.createdAt);
-                                const opcionesFecha = {
-                                  day: "numeric",
-                                  month: "short",
-                                  year: "2-digit",
-                                };
-                                const fechaFormateada =
-                                  fecha.toLocaleDateString(
-                                    "es-ES",
-                                    opcionesFecha
-                                  );
-
-                                return (
-                                  <tr
-                                    key={p?.id}
-                                    className=" hover:bg-green-300"
-                                  >
-                                    <td
-                                      className="px-6 py-4 whitespace-nowrap cursor-pointer"
-                                      onClick={() => handleEditPrestamo(p.id)}
-                                    >
-                                      {n + 1}
-                                    </td>
-                                    <td
-                                      className="px-6 py-4 whitespace-nowrap cursor-pointer"
-                                      onClick={() => handleEditPrestamo(p.id)}
-                                    >
-                                      {fechaFormateada}
-                                    </td>
-                                    <td
-                                      className="px-6 py-4 whitespace-nowrap text-left font-bold cursor-pointer"
-                                      onClick={() => handleEditPrestamo(p.id)}
-                                    >
-                                      {Intl.NumberFormat("ES-CP", {
+                                  <div className="divPageAdult">
+                                    <h1>#</h1>
+                                    <h2>{n + 1}</h2>
+                                  </div>
+                                  <div className="divPageAdult">
+                                    <h1>fecha</h1>
+                                    <h2>{fechaFormateada}</h2>
+                                  </div>
+                                  <div className="divPageAdult">
+                                    <h1>valor</h1>
+                                    <h2>
+                                      {Intl.NumberFormat("es-CO", {
                                         style: "currency",
                                         currency: "COP",
                                         minimumFractionDigits: 2,
                                         maximumFractionDigits: 2,
                                       }).format(p?.cantidad)}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
+                                    </h2>
+                                  </div>
+                                  <div className="divPageAdult">
+                                    <h1>editar</h1>
+                                    <h2>
                                       <button
-                                        className="btn-n w-10"
+                                        className="btns"
+                                        onClick={() => handleEditPrestamo(p.id)}
+                                      >
+                                        <GrEdit className="text-2xl" />
+                                      </button>
+                                    </h2>
+                                  </div>
+
+                                  <div className="divPageAdult">
+                                    <h1>eliminar</h1>
+                                    <h2>
+                                      <button
+                                        className="btns"
                                         onClick={() =>
                                           handleDeletePrestamo(p.id)
                                         }
                                       >
                                         <RiDeleteBin6Line className="text-2xl" />
                                       </button>
-                                    </td>
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
+                                    </h2>
+                                  </div>
+                                </section>
+                              );
+                            })}
+                          </div>
                         </div>
                       )}
                       {showVitrina[x?.id] && (
-                        <div className="overflow-x-auto px-2 py-2">
+                        <div className="overflow-x-auto px-2 py-2 bg-indigo-300 dark:bg-slate-700 border-4 border-indigo-700 dark:border-black m-1 ">
                           <h1 className="text-xl font-bold m-2">
                             VITRINA DETALLADO
                           </h1>
-                          <table className="min-w-full divide-y-4 divide-indigo-700 border-4 border-indigo-700">
-                            <thead className="bg-indigo-600">
-                              <tr>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  #
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-center text-lg uppercase tracking-wider"
-                                >
-                                  Fechas
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-lg uppercase tracking-wider"
-                                >
-                                  Nombre
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-lg uppercase tracking-wider"
-                                >
-                                  Valor
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-lg uppercase tracking-wider"
-                                >
-                                  Cantidad
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-lg uppercase tracking-wider"
-                                >
-                                  eliminar
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-indigo-400 divide-y-2 divide-indigo-700">
-                              {x?.vitrina?.map((p, n) => {
-                                const fecha = new Date(p?.createdAt);
-                                const opcionesFecha = {
-                                  day: "numeric",
-                                  month: "short",
-                                  year: "2-digit",
-                                };
-                                const fechaFormateada =
-                                  fecha.toLocaleDateString(
-                                    "es-ES",
-                                    opcionesFecha
-                                  );
+                          <div>
+                            {x?.vitrina?.map((p, n) => {
+                              const fecha = new Date(p?.createdAt);
+                              const opcionesFecha = {
+                                day: "numeric",
+                                month: "short",
+                                year: "2-digit",
+                              };
+                              const fechaFormateada = fecha.toLocaleDateString(
+                                "es-ES",
+                                opcionesFecha
+                              );
 
-                                return (
-                                  <tr
-                                    key={p?.id}
-                                    className=" hover:bg-green-300"
-                                  >
-                                    <td
-                                      className="px-6 py-4 whitespace-nowrap"
-                                    >
-                                      {n + 1}
-                                    </td>
-                                    <td
-                                      className="px-6 py-4 whitespace-nowrap"
-                                    >
-                                      {fechaFormateada}
-                                    </td>
-                                    <td
-                                      className="px-6 py-4 whitespace-nowrap text-left font-bold"
-                                    >
-                                      {p?.nombre}
-                                    </td>
-                                    <td
-                                      className="px-6 py-4 whitespace-nowrap text-left font-bold"
-                                    >
-                                      {Intl.NumberFormat("ES-CP", {
+                              return (
+                                <section
+                                  key={n}
+                                  className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-6 border-4 border-indigo-700 dark:border-black p-1 my-1 hover:bg-emerald-400 dark:hover:bg-emerald-800"
+                                >
+                                  <div className="divPageAdult">
+                                    <h1>#</h1>
+                                    <h2>{n + 1}</h2>
+                                  </div>
+
+                                  <div className="divPageAdult">
+                                    <h1>fecha</h1>
+                                    <h2>{fechaFormateada}</h2>
+                                  </div>
+                                  <div className="divPageAdult">
+                                    <h1>nombre</h1>
+                                    <h2>{p?.nombre}</h2>
+                                  </div>
+                                  <div className="divPageAdult">
+                                    <h1>valor</h1>
+                                    <h2>
+                                      {Intl.NumberFormat("ES-CO", {
                                         style: "currency",
                                         currency: "COP",
                                         minimumFractionDigits: 2,
                                         maximumFractionDigits: 2,
                                       }).format(p?.valor)}
-                                    </td>
-                                    <td
-                                      className="px-6 py-4 whitespace-nowrap text-left font-bold"
-                                    >
-                                      {p?.cantidad}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
+                                    </h2>
+                                  </div>
+                                  <div className="divPageAdult">
+                                    <h1>cantidad</h1>
+                                    <h2>{p?.cantidad}</h2>
+                                  </div>
+                                  <div className="divPageAdult">
+                                    <h1>eliminar</h1>
+                                    <h2>
                                       <button
-                                        className="btn-n w-10"
+                                        className="btns"
                                         onClick={() =>
                                           handleDeleteVitrina(p.id)
                                         }
                                       >
                                         <RiDeleteBin6Line className="text-2xl" />
                                       </button>
-                                    </td>
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
+                                    </h2>
+                                  </div>
+                                </section>
+                              );
+                            })}
+                          </div>
                         </div>
                       )}
                     </div>

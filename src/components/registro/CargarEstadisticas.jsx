@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 
 const CargarEstadisticas = () => {
   return (
-    <div className="contenedor1">
-      <div className="contenedor2">
-      <h3 className="font-bold">
+    <div className="contenedor">
+      <div className="">
+      <h3 className="font-bold text-center text-xl sm:text-lg">
         Click en el Logo de la pagina que desea cargar
       </h3>
 
-      <div className="font-bold grid grid-cols-4 ">
+      <div className="font-bold grid md:grid-cols-4 sm:grid-cols-1 text-center">
         <section className="w-48 img-e">
           <Link to="/estadisticas/carga/adultregular">
             <p>Corte</p>

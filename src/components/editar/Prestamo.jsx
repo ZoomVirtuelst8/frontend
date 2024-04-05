@@ -6,17 +6,20 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { MdOutlineSaveAs } from "react-icons/md";
+import ButtonHome from "../resource/ButtonHome";
 
 const Prestamo = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const prestamos = useSelector((state) => state.prestamo);
+  const token = useSelector((state) => state.token);
+
   const [nPrestamo, setNPrestamo] = useState({
     cantidad: "",
   });
   useEffect(() => {
-    dispatch(getPrestamoById(id));
+    dispatch(getPrestamoById(id, token));
   }, [dispatch]);
 
   useEffect(() => {
@@ -27,12 +30,13 @@ const Prestamo = () => {
     setNPrestamo({ ...nPrestamo, cantidad: e.target.value });
   };
   const updatePrestamos = () => {
-    dispatch(updatePrestamo(prestamos.id, nPrestamo));
+    dispatch(updatePrestamo(prestamos.id, nPrestamo, token));
     navigate("/home");
   };
   return (
     <div className="contenedor1">
       <div className="contenedor2">
+        <ButtonHome />
         <div className="divTitulo">
           <h1 className="titulo">Editar Prestamo</h1>
         </div>

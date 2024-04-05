@@ -14,6 +14,8 @@ const Streamate = () => {
   const [input, setInput] = useState([]);
   const [streamate, setStreamate] = useState(input);
   const quincenas = useSelector((state) => state.quincenas);
+  const token = useSelector((state) => state.token);
+
   const [id, setId] = useState("");
   const [rango, setRango] = useState({
     inicio: "",
@@ -24,7 +26,7 @@ const Streamate = () => {
     setStreamate([]);
   }, [id]);
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
 
   useEffect(() => {
@@ -186,7 +188,7 @@ const Streamate = () => {
   };
 
   const handlerSubmit = () => {
-    dispatch(postStreamate(streamate));
+    dispatch(postStreamate(streamate, token));
     setInput([]);
     setCose([]);
   };

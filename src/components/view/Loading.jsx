@@ -1,50 +1,41 @@
-import React, { useEffect, useState } from "react";
-import { useUser } from "@clerk/clerk-react";
-import { Await, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  checkUserById,
-  getUserId,
-} from "../../redux/actions/registro/registerUser.js";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { useSelector } from "react-redux";
 
 const Loading = () => {
-  const init = useSelector((state) => state.init);
-  const error = useSelector((state) => state.error);
-  const users = useSelector((state) => state.user);
-  const { user } = useUser();
+  const token = useSelector(state => state.token)
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const [id, setId] = useState("");
-
   useEffect(() => {
-    if (user || id) {
-      setId(user.id);
-    }
-    const checkUser = async () => {
+   
+    if (token) {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        await dispatch(checkUserById(id));
-        await dispatch(getUserId(id));
-        if (init !== "") {
-          if (init === true) {
-            if (users.admin === true) {
-              return navigate("/home");
-            } else {
-              return navigate(`/user/${user.id}`);
-            }
-          } else {
-            return navigate("/registro");
-          }
+        const decodedToken = jwtDecode(token);
+        if (decodedToken.admin) {
+          setTimeout(() => {
+            navigate("/home");
+          }, 5000); // Redirige a /home después de 5 segundos
+        } else {
+          setTimeout(() => {
+            navigate(`/user/${decodedToken.session}`);
+          }, 5000); // Redirige a /user/:id después de 5 segundos
         }
-      } catch (error) {}
-    };
-    checkUser();
-  }, [init, user, users]);
-
+      } catch (error) {
+        // Error al decodificar el token, redirigir a "/"
+        setTimeout(() => {
+          navigate("/");
+        }, 5000);
+      }
+    } else {
+      // No hay token presente, redirigir a "/"
+      setTimeout(() => {
+        navigate("/");
+      }, 5000);
+    }
+  }, []);
   return (
     <div>
-      <div className=" bg-indigo-200 min-h-screen flex justify-center items-center">
+      <div className=" bg-indigo-200 dark:bg-slate-900 min-h-screen flex justify-center items-center">
         <span className="loader"></span>
       </div>
     </div>

@@ -12,6 +12,7 @@ const RelationUbicationAndPorcenaje = () => {
   const allUser = useSelector((state) => state.allUser);
   const ubicacion = useSelector((state) => state.ubicaciones);
   const porcentaje = useSelector((state) => state.porcentajes);
+  const token = useSelector((state) => state.token);
 
   const [ok, setOk] = useState({
     ubicacion: "",
@@ -27,9 +28,9 @@ const RelationUbicationAndPorcenaje = () => {
   const [showPorcentaje, setShowPorcentaje] = useState(true);
 
   useEffect(() => {
-    dispatch(getAllUser());
-    dispatch(getAllPorcentaje());
-    dispatch(getAllUbicacion());
+    dispatch(getAllUser(token));
+    dispatch(getAllPorcentaje(token));
+    dispatch(getAllUbicacion(token));
   }, [dispatch]);
 
   const userSelect = allUser.find((x) => {
@@ -88,20 +89,20 @@ const RelationUbicationAndPorcenaje = () => {
   };
 
   const handlerSubmit = () => {
-    dispatch(relationUbicationAndPorcentaje(input));
+    dispatch(relationUbicationAndPorcentaje(input, token));
   };
 
   return (
-    <div className="contenedor1">
-      <div className="contenedor2">
+    <div className="contenedor">
+      <div className="">
         <div className="divTitulo">
           <h1 className="titulo">
             Relacion Ubicacion Y Porcentaje De Usuarios
           </h1>
 
           <form onSubmit={handlerSubmit}>
-            <section className=" px-20 grid min-w-min mx-20 rounded-lg m-5 p-5 bg-indigo-300">
-              <h1 className=" font-bold text-black text-3xl">
+            <section className="sectionform">
+              <h1 className="title2">
                 Datos Laborales
               </h1>
               <section className="">

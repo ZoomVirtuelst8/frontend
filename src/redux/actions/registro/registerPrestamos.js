@@ -12,11 +12,15 @@ const URL = import.meta.env.VITE_REACT_APP_URL;
 const PRESTAMOS = import.meta.env.VITE_REACT_APP_URL_PRESTAMOS;
 const DELETE = import.meta.env.VITE_REACT_APP_URL_DELETE;
 
-export const postPrestamos = (prestamo) => {
+export const postPrestamos = (prestamo, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PRESTAMOS}`;
-      const { data } = await axios.post(endpoint, prestamo);
+      const { data } = await axios.post(endpoint, prestamo, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: PRESTAMO,
         payload: data,
@@ -30,11 +34,15 @@ export const postPrestamos = (prestamo) => {
   };
 };
 
-export const getPrestamoById = (id) => {
+export const getPrestamoById = (id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PRESTAMOS}/${id}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: GETPRESTAMOBYID,
         payload: data,
@@ -48,11 +56,15 @@ export const getPrestamoById = (id) => {
   };
 };
 
-export const updatePrestamo = (id, nPrestamo) => {
+export const updatePrestamo = (id, nPrestamo, token) => {
   return async (dispatch) => {
     try {
-      const endpoint = `${URL}/${PRESTAMOS}/${id}`;
-      const { data } = await axios.put(endpoint, nPrestamo);
+      const endpoint = `${URL}/${PRESTAMOS}/${id, token}`;
+      const { data } = await axios.put(endpoint, nPrestamo, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: UPDATEPRESTAMOS,
         payload: data,
@@ -66,11 +78,15 @@ export const updatePrestamo = (id, nPrestamo) => {
   };
 };
 
-export const deletePrestamos = (id) => {
+export const deletePrestamos = (id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PRESTAMOS}/${DELETE}/${id}`;
-      const { data } = await axios.delete(endpoint);
+      const { data } = await axios.delete(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: DELETEPRESTAMOS,
         payload: data,

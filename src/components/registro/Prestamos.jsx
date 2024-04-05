@@ -9,6 +9,7 @@ const Prestamos = () => {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.allUserIdName);
   const quincenas = useSelector((state) => state.quincenas);
+  const token = useSelector(state => state.token)
 
   const handleQuincena = (event) => {
     setPrestamo({
@@ -24,8 +25,8 @@ const Prestamos = () => {
   });
 
   useEffect(() => {
-    dispatch(getAllQuincena());
-    dispatch(getAllUserIdName());
+    dispatch(getAllQuincena(token));
+    dispatch(getAllUserIdName(token));
   }, [dispatch]);
 
   useEffect(() => {
@@ -80,17 +81,17 @@ const Prestamos = () => {
   };
 
   const handleSubmit = () => {
-    dispatch(postPrestamos(prestamo));
+    dispatch(postPrestamos(prestamo, token));
   };
   return (
-    <div className="contenedor1">
-      <div className="contenedor2">
+    <div className="contenedor">
+      <div>
         <div className="divTitulo">
-          <h1 className="titulo">Registro De Compras</h1>
+          <h1 className="titulo">Registro De Prestamos</h1>
         </div>
         <form onSubmit={handleSubmit}>
-          <section className="form text-right">
-            <section className="sectionSelect">
+          <section className="sectionform">
+            <section className="divinput">
               <select
                 className="select"
                 onChange={handleQuincena}
@@ -109,7 +110,7 @@ const Prestamos = () => {
                   })}
               </select>
             </section>
-            <section>
+            <section className="divinput">
               <select className="select" onChange={handleUser}>
                 <option value="">Seleccione Un usuario</option>
                 {users &&
@@ -123,7 +124,10 @@ const Prestamos = () => {
               </select>
             </section>
             <section className="section">
+              <div className="divlabel">
               <label className="label">Cantidad</label>
+              </div>
+              <div className="divinput">
               <input
                 type="number"
                 className="no-spin input"
@@ -132,10 +136,11 @@ const Prestamos = () => {
                 onChange={handlePrestamos}
                 min="1"
               />
+              </div>
             </section>
           </section>
-          <section>
-                <button className="btn-w" type="submit">
+          <section className="sectionbtns">
+                <button className="btns" type="submit">
                   <BiSend className="BiSend" />
                 </button>
               </section>

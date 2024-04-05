@@ -12,12 +12,14 @@ const StreamRay = () => {
   const reporte = useSelector((state) => state.spg);
   const errors = useSelector((state) => state.error);
   const quincenas = useSelector((state) => state.quincenas);
+  const token = useSelector((state) => state.token);
+
   const [input, setInput] = useState([]);
   const [streamRay, setStreamRay] = useState(input);
   const [id, setId] = useState("");
 
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
 
   useEffect(() => {
@@ -74,7 +76,7 @@ const StreamRay = () => {
   };
 
   const handleSubmit = () => {
-    dispatch(postStreamRay(streamRay));
+    dispatch(postStreamRay(streamRay, token));
     setInput([]);
     setStreamRay([]);
   };

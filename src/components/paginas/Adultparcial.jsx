@@ -12,13 +12,14 @@ function Adultparcial() {
   const dispatch = useDispatch();
   const reporte = useSelector((state) => state.spg);
   const errors = useSelector((state) => state.error);
+  const token = useSelector((state) => state.token);
   const [input, setInput] = useState([]);
   const [copad, setCopad] = useState(input);
   const quincenas = useSelector((state) => state.quincenas);
   const [id, setId] = useState("");
 
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
   useEffect(() => {
     setInput([])
@@ -90,7 +91,7 @@ function Adultparcial() {
   };
 
   const handlerSubmit = () => {
-    dispatch(ppad(copad));
+    dispatch(ppad(copad, token));
     setInput([]);
     setCopad([]);
   };

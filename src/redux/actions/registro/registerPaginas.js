@@ -5,98 +5,123 @@ import {
   GETBIPAG,
   UPDATEPAG,
   DELETEPAG,
-  PERROR,
-  GERROR,
+  ERROR,
 } from "../../actionsTypes.js";
-
+import { handleError } from "../../../util/errorHandling";
 const URL = import.meta.env.VITE_REACT_APP_URL;
 const PAGINAS = import.meta.env.VITE_REACT_APP_URL_PAGINA;
 const DELETE = import.meta.env.VITE_REACT_APP_URL_DELETE;
 
-export const postPagina = (pagina) => {
+export const postPagina = (pagina, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PAGINAS}`;
-      const { data } = await axios.post(endpoint, { pagina });
+      const { data } = await axios.post(
+        endpoint,
+        { pagina },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
       dispatch({
         type: PAGINA,
         payload: data,
       });
     } catch (error) {
+      // console.log(error)
+      const errorMessage = handleError(error)
       dispatch({
         type: ERROR,
-        payload: error.message,
+        payload: errorMessage,
       });
     }
   };
 };
 
-export const getAllPagina = () => {
+export const getAllPagina = (token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PAGINAS}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: GETPAG,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: ERROR,
+        type: GERROR,
         payload: error.message,
       });
     }
   };
 };
 
-export const getPaginaById = (id) => {
+export const getPaginaById = (id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PAGINA}/${id}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: GETBIPAG,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: ERROR,
+        type: GERROR,
         payload: error,
       });
     }
   };
 };
 
-export const updatePagina = (id, nPagina) => {
+export const updatePagina = (id, nPagina, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PAGINA}/${id}`;
-      const { data } = await axios.put(endpoint, nPagina);
+      const { data } = await axios.put(endpoint, nPagina, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: UPDATEPAG,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: ERROR,
+        type: GERROR,
         payload: error,
       });
     }
   };
 };
 
-export const deletePagina = (id) => {
+export const deletePagina = (id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${PAGINA}/${DELETE}/${id}`;
-      const { data } = await axios.delete(endpoint);
+      const { data } = await axios.delete(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: DELETEPAG,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: ERROR,
+        type: GERROR,
         payload: error,
       });
     }

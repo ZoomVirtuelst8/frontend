@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { BiSend } from "react-icons/bi";
 
@@ -20,12 +20,12 @@ const validationsError = (ubicacion) => {
 const RegisterUbicacion = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const token = useSelector((state) => state.token);
   const [ubicacion, setUbicacion] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    dispatch(getAllUbicacion());
+    dispatch(getAllUbicacion(token));
   }, [dispatch]);
 
   const handleUbicacion = (event) => {
@@ -37,41 +37,39 @@ const RegisterUbicacion = () => {
     e.preventDefault();
     const validacionFinal = validationsError(ubicacion);
     if (Object.keys(validacionFinal).length === 0) {
-      dispatch(postUbicacion(ubicacion));
+      dispatch(postUbicacion(ubicacion, token));
       setUbicacion("");
       navigate("/crear");
     }
     setError(validacionFinal);
   };
 
-
   return (
-    <div className="contenedor1">
-      <div className="contenedor2">
+    <div className="contenedor">
+      <div>
         <form onSubmit={handleSubmit}>
-          <section className="form">
-            <h1 className="font-bold text-black text-3xl my-2">
-              Registro De Ubicacion
-            </h1>
-
-            <section className="sectionMoneda items-center">
-              <h1 className="sectionH1">Ubicacion:</h1>
-              <input
-                type="text"
-                value={ubicacion}
-                onChange={handleUbicacion}
-                className="input"
-              />
-            </section>
-            {error.ubicacion && (
-              <div className="text-center text-red-500 font-bold">
-                {error.ubicacion}
+          <div className="divTitulo">
+            <h1 className="titulo">Registro De Ubicacion</h1>
+          </div>
+          <section className="sectionform">
+            <section className="section">
+              <div className="divlabel">
+                <label className="label">Ubicacion:</label>
               </div>
-            )}
+              <div className="divinput">
+                <input
+                  type="text"
+                  value={ubicacion}
+                  onChange={handleUbicacion}
+                  className="input"
+                />
+              </div>
+            </section>
+            {error.ubicacion && <div className="error">{error.ubicacion}</div>}
           </section>
-          <section className="flex items-center justify-center">
-            <button className="btn-w w-auto font-bold text-4xl" type="submit">
-              <BiSend />
+          <section className="sectionbtns">
+            <button className="btns" type="submit">
+              <BiSend className="BiSend" />
             </button>
           </section>
         </form>

@@ -11,6 +11,7 @@ import {
 function Adultregular() {
   const reporte = useSelector((state) => state.spg);
   const errors = useSelector((state) => state.error);
+  const token = useSelector((state) => state.token);
   const [input, setInput] = useState([]);
   const [coad, setCoad] = useState(input);
 
@@ -51,7 +52,7 @@ function Adultregular() {
   };
 
   const handlerSubmit = () => {
-    dispatch(pad(coad));
+    dispatch(pad(coad, token));
     setInput([]);
     setCoad([]);
   };
@@ -63,7 +64,7 @@ function Adultregular() {
     setInput([])
   }, [id])
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
 
   useEffect(() => {

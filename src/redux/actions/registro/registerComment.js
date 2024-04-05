@@ -14,11 +14,15 @@ const URL = import.meta.env.VITE_REACT_APP_URL;
 const COMMENT = import.meta.env.VITE_REACT_APP_URL_COMMENT;
 const DELETE = import.meta.env.VITE_REACT_APP_URL_DELETE;
 
-export const postComment = (nComment) => {
+export const postComment = (nComment, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${COMMENT}`;
-      const { data } = await axios.post(endpoint, nComment);
+      const { data } = await axios.post(endpoint, nComment, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: POSTCOMMENT,
         payload: data,

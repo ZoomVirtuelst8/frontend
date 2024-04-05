@@ -34,11 +34,12 @@ const RegisterPorcentaje = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const globalLocation = useSelector((state) => state.porcentajes);
+  const token = useSelector((state) => state.token);
 
   const [error, setError] = useState({});
 
   useEffect(() => {
-    dispatch(getAllPorcentaje());
+    dispatch(getAllPorcentaje(token));
   }, [dispatch]);
 
   const [porcentajes, setPorcentajes] = useState({
@@ -105,7 +106,7 @@ const RegisterPorcentaje = () => {
     e.preventDefault();
     const validacionFinal = validationsError(porcentajes);
     if (Object.keys(validacionFinal).length === 0) {
-      dispatch(postPorcentaje(porcentajes));
+      dispatch(postPorcentaje(porcentajes, token));
       setPorcentajes({
         nombre: "",
         inicial: "",
@@ -118,79 +119,80 @@ const RegisterPorcentaje = () => {
   };
 
   return (
-    <div className="contenedor1">
-      <div className="contenedor2">
+    <div className="contenedor">
+      <div>
         <form onSubmit={handleSubmit}>
-          <section className="form">
-            <h1 className="font-bold text-black text-2xl">
-              Registro De Porcentaje
-            </h1>
+          <div className="divTitulo">
+            <h1 className="titulo">Registro De Porcentaje</h1>
+          </div>
+          <section className="sectionform">
+            <section className="section">
+              <div className="divlabel">
+                {" "}
+                <label className="label">Nombre:</label>
+              </div>
+              <div className="divinput">
+                <input
+                  type="text"
+                  value={porcentajes.nombre}
+                  onChange={handleNombre}
+                  className="input"
+                />
+              </div>
+            </section>
+            {error.nombre && <div className="error">{error.nombre}</div>}
+            <section className="setion">
+              <div className="divlabel">
+                <label className="label">Inical:</label>
+              </div>
+              <div className="divinput">
+                <input
+                  type="number"
+                  value={porcentajes.inicial}
+                  onChange={handleInicial}
+                  min="1" // Valor mínimo permitido (positivo)
+                  // step="1" // Incremento/decremento permitido (solo números enteros)
+                  className="no-spin input"
+                />
+              </div>
+            </section>
+            {error.inicial && <div className="error">{error.inicial}</div>}
+
+            <section className="setion">
+              <div className="divlabel">
+                <label className="label">Final:</label>
+              </div>
+              <div className="divinput">
+                <input
+                  type="number"
+                  value={porcentajes.final}
+                  onChange={handleFinal}
+                  min="1"
+                  className="no-spin input"
+                />
+              </div>
+            </section>
+            {error.final && <div className="error">{error.final}</div>}
 
             <section className="setionLocation">
-              <h1 className="sectionH1">Nombre:</h1>
-              <input
-                type="text"
-                value={porcentajes.nombre}
-                onChange={handleNombre}
-              />
-            </section>
-            {error.nombre && (
-              <div className="text-center text-red-500 font-bold">
-                {error.nombre}
+              <div className="divlabel">
+                <label className="label">Meta:</label>
               </div>
-            )}
-            <section className="setionLocation">
-              <h1 className="sectionH1">Inical:</h1>
-              <input
-                type="number"
-                value={porcentajes.inicial}
-                onChange={handleInicial}
-                min="1" // Valor mínimo permitido (positivo)
-                // step="1" // Incremento/decremento permitido (solo números enteros)
-                className="no-spin"
-              />
-            </section>
-            {error.inicial && (
-              <div className="text-center text-red-500 font-bold">
-                {error.inicial}
+              <div className="divinput">
+                <input
+                  type="number"
+                  value={porcentajes.meta}
+                  onChange={handleMeta}
+                  min="1"
+                  className="no-spin input"
+                />
               </div>
-            )}
-
-            <section className="setionLocation">
-              <h1 className="sectionH1">Final:</h1>
-              <input
-                type="number"
-                value={porcentajes.final}
-                onChange={handleFinal}
-                min="1"
-                className="no-spin"
-              />
             </section>
-            {error.final && (
-              <div className="text-center text-red-500 font-bold">
-                {error.final}
-              </div>
-            )}
-
-            <section className="setionLocation">
-              <h1 className="sectionH1">Meta:</h1>
-              <input
-                type="number"
-                value={porcentajes.meta}
-                onChange={handleMeta}
-                min='1'
-                className="no-spin"
-              />
-            </section>
-            {error.meta && (
-              <div className="text-center text-red-500 font-bold">
-                {error.meta}
-              </div>
-            )}
+            {error.meta && <div className="error">{error.meta}</div>}
           </section>
-          <section className="flex items-center justify-center">
-            <button className="btn-w w-auto font-bold text-4xl" type="submit">
-              <BiSend />
+          <section className="sectionbtns">
+            <button className="btns" type="submit">
+              <BiSend className="BiSend" />
             </button>
           </section>
         </form>

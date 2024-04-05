@@ -2,6 +2,189 @@
 @tailwind components;
 @tailwind utilities;
 
+/* styles arreglados */
+/*todo GENERAL  */
+/* contenedores generales */
+.contenedor {
+  @apply min-h-screen bg-indigo-200 dark:bg-slate-900 dark:text-slate-300 flex justify-center items-center flex-col;
+}
+.contenedor1 {
+  @apply  bg-indigo-200 dark:bg-slate-900 dark:text-slate-300 min-h-screen top-0 text-center;
+}
+/* botones generales */
+.btns {
+  @apply p-1 font-bold px-2 m-1 bg-amber-100 dark:bg-gray-500 rounded-xl hover:bg-amber-300 dark:hover:bg-gray-700 dark:hover:text-white  active:bg-indigo-400 dark:active:bg-white dark:active:text-black cursor-pointer ;
+}
+/* botones cerrar sesion */
+.btnssesion {
+  @apply w-fit px-2 h-11 uppercase text-sm rounded-xl p-1 font-bold  m-1 bg-black text-white dark:bg-white dark:text-black  hover:bg-gray-500 dark:hover:bg-gray-300 hover:text-white  active:bg-red-500 dark:active:bg-red-500 dark:active:text-black cursor-pointer ;
+}
+/* section de los formularios */
+.sectionform {
+  @apply flex justify-center items-center flex-col bg-indigo-300 dark:bg-slate-800 dark:text-slate-300 m-2 p-2 rounded-xl
+}
+/* inputs generales */
+.input {
+  @apply px-2 m-1 text-center border border-black font-bold w-fit bg-indigo-200 dark:bg-slate-600 dark:text-slate-300 h-6 rounded-lg text-slate-950;
+}
+/* div inputs generales */
+.divinput {
+  @apply flex justify-center items-center;
+}
+/* confirmation  */
+.confirmation {
+  @apply md:text-6xl sm:text-2xl bg-indigo-300 dark:bg-slate-800 dark:text-slate-300 p-4 rounded-3xl  font-bold uppercase
+}
+/* div labels generales */
+.divlabel {
+  @apply text-center
+}
+/* label general */
+.label {
+  @apply p-1 font-bold text-lg text-center;
+}
+/* select general */
+.select {
+  @apply bg-indigo-400 dark:bg-slate-700 dark:text-slate-300 rounded-lg px-4 m-1 w-auto h-6  text-center ;
+}
+/* titulos generales */
+.title {
+  @apply sm:text-2xl md:text-4xl font-bold p-2 uppercase text-center
+}
+/* div de los titulos generales */
+.divTitulo {
+  @apply text-center flex flex-col items-center justify-center;
+}
+/* titulos generales 2 */
+.titulo {
+  @apply bg-indigo-300 dark:bg-slate-600 w-auto justify-center m-2 p-2 px-4 rounded-xl font-bold text-3xl sm:text-lg;
+}
+/* subtitulos generales */
+.title2 {
+  @apply sm:text-xl md:text-2xl font-bold p-2 uppercase text-center
+}
+/* para las imagenes de las paginas */
+.img-e {
+  @apply md:m-3 sm:mx-auto sm:m-2 bg-indigo-300 dark:bg-slate-800 p-2 rounded-xl hover:bg-purple-200 dark:hover:bg-gray-400  active:bg-red-700 dark:active:bg-red-300;
+}
+/* errores generales */
+.error {
+  @apply text-center text-red-500 font-bold;
+}
+/* para que no se cambie el tamano de una textarea */
+.u {
+  resize: none;
+}
+/* para el textarea */
+.text-m {
+  @apply w-full text-center h-80 bg-indigo-300 dark:bg-slate-600 p-5;
+}
+/* section de los form generales */
+.section {
+  @apply grid grid-cols-1;
+}
+/* para el icono de envio */
+.BiSend {
+  @apply text-3xl;
+}
+.sectionbtns {
+  @apply flex items-center justify-center;
+}
+/*todo LOGIN  */
+/* titolo del login */
+.titlelogin {
+  @apply text-4xl font-bold p-2 uppercase text-center;
+}
+/* botonos del login */
+.btnslogin {
+  @apply p-1 h-20 px-2 m-1 bg-amber-100 rounded-xl hover:bg-amber-300  active:bg-indigo-400 cursor-pointer dark:text-slate-900;
+}
+/* contendor de bontones */
+.conbtnslogin {
+  @apply p-1 px-6 text-lg flex justify-center h-12 items-center font-bold fixed bottom-28 z-10;
+}
+/*todo SIGNIN  */
+/* titulos de inicio de sesion */
+.titlesignin {
+  @apply text-2xl font-bold p-2 uppercase text-center;
+}
+/* navbar */
+.navbar {
+  @apply  bg-indigo-300 dark:bg-slate-700 flex justify-center
+}
+/*todo DETAIL USER  */
+.divDetail {
+  @apply grid grid-cols-2 text-right items-center font-bold text-2xl sm:text-lg border-b-2;
+}
+.detalle {
+  @apply text-center uppercase sm:text-lg font-bold font-spartan;
+}
+.detalles {
+  @apply text-left mx-4 font-bold font-spartan;
+}
+
+/*todo tabla home  */
+.dht {
+  @apply p-3 border-2 border-indigo-700 bg-indigo-400 dark:bg-slate-700 dark:border-slate-400 m-0.5
+}
+.divPageContainer {
+  @apply border-4 my-6 border-black rounded-xl bg-indigo-500 p-0.5 dark:bg-slate-800 hover:bg-emerald-400 dark:hover:bg-emerald-800
+}
+.divPages {
+  @apply grid lg:grid-cols-5 sm:grid-cols-1 md:grid-cols-3 m-2 border-4 border-indigo-700 dark:border-black bg-indigo-300 dark:bg-slate-700 my-4 p-2
+}
+.sectionPage1 {
+  @apply  m-1 bg-indigo-400 dark:bg-slate-800 p-1 rounded-lg hover:bg-emerald-400 dark:hover:bg-emerald-800
+}
+.sectionPage1 h1 {
+  @apply font-bold
+}
+.sectionPage1 h2 {
+  @apply font-semibold
+}
+.sectionPage2 {
+  @apply    grid grid-cols-2 hover:bg-emerald-400 dark:hover:bg-emerald-800
+}
+.divPageAdult {
+  @apply border-2 border-indigo-900 dark:border-black m-0.5 bg-indigo-400 dark:bg-slate-600 hover:bg-emerald-400 dark:hover:bg-emerald-900
+}
+.divPageAdult h1 {
+  @apply uppercase
+}
+.divPageAdult h2 {
+  @apply font-bold
+}
+.divPageRojo {
+  @apply border-2 border-black dark:border-black m-0.5 bg-indigo-400 dark:bg-slate-600 hover:bg-emerald-400 dark:hover:bg-emerald-900
+}
+.divPageRojo h1 {
+  @apply uppercase
+}
+.divPageRojo h2 {
+  @apply font-bold
+}
+/*todo saldos rojos o verdes  */
+.saldoPositivo {
+  @apply bg-emerald-500 text-black font-bold
+}
+.saldoRojo {
+  @apply bg-red-600
+}
+.btn-rojos {
+  @apply p-1 px-2  bg-red-500 rounded-xl font-sans hover:bg-red-800  active:bg-green-400 border-2 border-black;
+}
+/*todo los users  */
+.divPageUser {
+  @apply border-2 border-indigo-900 dark:border-black m-0.5 bg-indigo-400 dark:bg-slate-600 hover:bg-emerald-400 dark:hover:bg-emerald-900
+}
+.divPageUser h1 {
+  @apply uppercase border-b-2 border-indigo-900 dark:border-black
+}
+.divPageUser h2 {
+  @apply font-bold
+}
+
+/* 
 .btnStore {
   @apply mx-2 rounded-md scale-125 bg-orange-100  hover:bg-orange-100  active:bg-indigo-200;
 }
@@ -10,9 +193,7 @@
   @apply p-1 px-2 m-1 bg-amber-100 rounded-xl hover:bg-amber-300  active:bg-indigo-400 cursor-pointer;
 }
 
-.img-e {
-  @apply m-4 bg-indigo-300 p-3 rounded-xl hover:bg-purple-200  active:bg-red-700;
-}
+
 
 .img-u {
   @apply mx-2 bg-indigo-400 p-3 rounded-xl w-20;
@@ -20,14 +201,6 @@
 
 .img-d {
   @apply mx-2 bg-indigo-400 rounded-full w-96;
-}
-
-.text-m {
-  @apply w-full text-center h-80 bg-indigo-300 p-5;
-}
-
-.u {
-  resize: none;
 }
 .contenedor3 {
   @apply flex grid-cols-2 justify-center;
@@ -46,9 +219,7 @@
   @apply text-left mx-4 font-bold font-spartan;
 }
 
-.divDetail {
-  @apply grid grid-cols-2 m-2 font-bold text-2xl;
-}
+
 
 .setionLocation {
   @apply grid grid-cols-2 m-2 mr-48;
@@ -71,37 +242,32 @@
 .adult {
   background-color: #C4B5FD;
 }
-/*todo   ya esta verificada */
+todo   ya esta verificada
 .iconPage {
   @apply w-24 m-2;
 }
-/*todo   ya esta verificada */
+todo   ya esta verificada
 .sectionIconPage {
   @apply flex justify-center items-center ;
 }
-/*todo   ya esta verificada */
+todo   ya esta verificada
 .sectionPage {
   @apply border-r-2 border-indigo-500;
 }
-/*todo   ya esta verificada */
-.BiSend {
-  @apply text-3xl;
-}
-/*todo   ya esta verificada */
 .btn-w {
   @apply p-1 px-2 m-2 bg-orange-100 rounded-xl font-sans hover:bg-orange-200  active:bg-indigo-400;
 }
 .btn-rojos {
   @apply p-1 px-2  bg-red-500 rounded-xl font-sans hover:bg-red-800  active:bg-green-400 border-2 border-black;
 }
-/*todo   ya esta verificada */
+todo   ya esta verificada
 .contenedor1 {
-  @apply  bg-indigo-200 dark:bg-slate-900 min-h-screen top-0;
+  @apply  bg-indigo-200 dark:bg-slate-900 dark:text-slate-300 min-h-screen top-0;
 }
 .contenedorVentas {
   @apply h-screen bg-indigo-200 dark:bg-slate-900 top-0 min-w-full flex;
 }
-/*todo   ya esta verificada */
+todo   ya esta verificada
 .contenedorVentas2 {
   @apply  text-center w-9/12;
 }
@@ -111,57 +277,46 @@
 .contenedor2 {
   @apply pt-14 text-center;
 }
-/*todo   ya esta verificada */
+todo   ya esta verificada
 .error {
   @apply text-center text-red-500 font-bold;
 }
-/*todo   ya esta verificada */
-.label {
-  @apply p-1 font-bold text-lg;
-}
-/*todo   ya esta verificada */
-.input {
-  @apply px-2 m-1 text-center border border-black font-bold w-full bg-indigo-200 h-6 rounded-lg;
-}
+todo   ya esta verificada
+
+todo   ya esta verificada
+
 .inputEdit {
   @apply px-2 m-1 text-center border border-black font-bold bg-indigo-200 h-6 rounded-lg;
 }
-/*todo   ya esta verificada */
+todo   ya esta verificada
 .section {
   @apply grid grid-cols-2 justify-center items-center;
 }
-/*todo   ya esta verificada */
+todo   ya esta verificada
 .sectionGlobal {
   @apply text-right;
 }
-/*todo   ya esta verificada */
+todo   ya esta verificada
 .sectionSelect {
   @apply rounded-lg px-4 w-auto justify-center items-center flex;
 }
-/*todo   ya esta verificada */
-.select {
-  @apply bg-indigo-400 rounded-lg px-4 m-1 w-auto h-6  text-center;
-}
+todo   ya esta verificada
 .selectEdit {
   @apply bg-indigo-400 rounded-lg px-4 m-1 w-96 h-7  text-center;
 }
-/*todo   ya esta verificada */
+todo   ya esta verificada
 .form {
   @apply flex flex-col items-center px-10 bg-indigo-300 min-w-min rounded-lg m-2 p-1;
 }
-/*todo   ya esta verificada */
+todo   ya esta verificada
 .subTitulo {
   @apply text-2xl font-bold;
 }
-/*todo   ya esta verificada */
-.titulo {
-  @apply bg-indigo-300 w-auto justify-center m-2 p-2 px-4 rounded-xl font-bold text-3xl;
-}
-/*todo   ya esta verificada */
-.divTitulo {
-  @apply text-center flex flex-col items-center justify-center;
-}
-/*todo   ya esta verificada */
+todo   ya esta verificada
+
+todo   ya esta verificada
+
+todo   ya esta verificada
 .sectionProducto {
   @apply bg-indigo-300 m-1 rounded-2xl border-2 border-indigo-400 text-justify;
 }
@@ -179,34 +334,14 @@
   @apply font-normal text-center 
 }
 
-/*//todo para los detalles de hoja de pago */
+//todo para los detalles de hoja de pago
 .porcentaje {
   @apply grid grid-cols-7 bg-indigo-400 border-4 border-indigo-600  font-bold rounded-xl
 }
-.saldoPositivo {
-  @apply bg-green-500 
-}
-.saldoRojo {
-  @apply bg-red-600
-}
-.divPageContainer {
-  @apply w-fit border-4 m-2 my-8 border-black rounded-xl bg-indigo-500 
-}
-.divPages {
-  @apply grid grid-cols-5 m-2 border-4 border-indigo-700 bg-indigo-300 my-4 p-2
-}
-.sectionPage1 {
-  @apply  m-1 bg-indigo-400 p-1 rounded-lg hover:bg-green-300
-}
-.sectionPage1 h1 {
-  @apply font-bold text-indigo-900
-}
-.sectionPage1 h2 {
-  @apply font-semibold
-}
-.sectionPage2 {
-  @apply  bg-indigo-400 grid grid-cols-2 hover:bg-green-300
-}
+
+
+
+ */
 .no-spin {
   -moz-appearance: textfield; /* Firefox */
   appearance: textfield; /* Otros navegadores */

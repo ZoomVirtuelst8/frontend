@@ -1,19 +1,20 @@
+// importaciones generales
 import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { BiSend } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "@clerk/clerk-react";
 
+//importaciones de funciones desde el redux
 import { registroUser } from "../../redux/actions/registro/registerUser.js";
 import { resetError } from "../../redux/actions/resetError.js";
-
+// vaidaciones de inputs
 const validacion = (input) => {
-  let error = {};
+let error = {};
   //validacion nombre
   if (input.nombre.length < 3 || input.nombre.length === 0) {
-    error.nombre = "El nombre es requisito obligatorio";
+    error.nombre = "El nombre es requisito obligatorio"; 
   }
   //validacion apellido
   if (input.apellido.length < 3 || input.apellido === 0) {
@@ -84,21 +85,29 @@ const validacion = (input) => {
   if (input.direccion.length < 10 || input.direccion.length === 0) {
     error.direccion = "Direccion Invalida";
   }
+  if (input.session.length < 3 || input.session.length === 0) {
+    error.session = "UserName Invalido";
+  }
+  if (input.password.length < 4 || input.password.length === 0) {
+    error.password = "Contraseña Invalida";
+  }
+  if (input.verify !== input.password) {
+    error.verify = "Las contraseñas no coinciden";
+  }
 
   return error;
 };
-
+// componente
 const RegisterUser = () => {
+  // funcionaledad
   const navigate = useNavigate();
-  const users = useSelector((state) => state.user);
-  const perror = useSelector((state) => state.perror);
-  const gerror = useSelector((state) => state.gerror);
-  // const [isRegister, setIsRegister] = useState(false);
-  const { user } = useUser();
-
   const dispatch = useDispatch();
+  // estados globales
+  const perror = useSelector((state) => state.Error);
+// estados locales
   const [error, setError] = useState({});
   const [showForm, setShowForm] = useState(true);
+  const [showConfirmation, setShowConfirmation] = useState(false)
   const [confirmacion, setConfirmacion] = useState("");
   const [input, setInput] = useState({
     nombre: "",
@@ -109,26 +118,16 @@ const RegisterUser = () => {
     fechaDeNacimiento: "",
     whatsapp: "",
     direccion: "",
+    session: "",
+    password: "",
+    verify: "",
   });
-
+// funcionalidad para setear los errores estados globales del post
   useEffect(() => {
     dispatch(resetError());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (user) {
-      setInput((prevInput) => ({
-        ...prevInput,
-        id: user.id || "",
-        image: user.imageUrl || "",
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        email: user.emailAddresses?.[0]?.emailAddress || "",
-        admin: false,
-      }));
-    }
-  }, [user]);
-
+  
+// manejo de los inputs
   const handleNombre = (event) => {
     setInput({
       ...input,
@@ -237,46 +236,92 @@ const RegisterUser = () => {
     );
   };
 
+  const handleSession = (event) => {
+    setInput({
+      ...input,
+      session: event.target.value,
+    });
+    setError(
+      validacion({
+        ...input,
+        session: event.target.value,
+      })
+    );
+  };
+
+  const handlePassword = (event) => {
+    setInput({
+      ...input,
+      password: event.target.value,
+    });
+    setError(
+      validacion({
+        ...input,
+        password: event.target.value,
+      })
+    );
+  };
+
+  const handleVerify = (event) => {
+    setInput({
+      ...input,
+      verify: event.target.value,
+    });
+    setError(
+      validacion({
+        ...input,
+        verify: event.target.value,
+      })
+    );
+  };
+// envio de la informacion al server
   const handleCrear = async (e) => {
+    // evita el evio de informacion antes de tiempo
     e.preventDefault();
+    // validacion de errores del formulario
     const errores = validacion(input);
     try {
       if (Object.keys(errores).length === 0) {
-      dispatch(registroUser(input));
-
-      if (!perror) {
-        setConfirmacion("SE ENVIO LA SOLICITUD.");
-        setTimeout(() => {
-          setConfirmacion("");
-          navigate("/");
-        }, 2000);
-        setInput({
-          nombre: "",
-          apellido: "",
-          nacionalidad: "",
-          cedula: "",
-          telefono: "",
-          fechaDeNacimiento: "",
-          whatsapp: "",
-          direccion: "",
-        });
-        setShowForm(false);
-      } else {
-        setShowForm(true);
+        await dispatch(registroUser(input));
       }
-    }
-
-    setError(errores);
+      setError(errores);
     } catch (error) {
-      
     }
-    
   };
-
+  // manejo de errores de la peticion
+  useEffect(() => {
+    (async () => {
+      try {
+        setShowConfirmation(true)
+        setConfirmacion("SE ENVIO LA SOLICITUD.");
+          setTimeout(() => {
+            setConfirmacion("");
+            navigate("/");
+          }, 2000);
+          setInput({
+            nombre: "",
+            apellido: "",
+            nacionalidad: "",
+            cedula: "",
+            telefono: "",
+            fechaDeNacimiento: "",
+            whatsapp: "",
+            direccion: "",
+            session: "",
+            password: "",
+            verify: "",
+          });
+          setShowForm(false);
+      } catch (error) {
+        showForm(true)
+        setShowConfirmation(false)
+      }
+    })
+  }, [])
   const paises = ["Colombia", "Venezuela"];
   return (
-    <div className="contenedor1 -mt-14">
-      {confirmacion && (
+    <div className="contenedor">
+      {showConfirmation && (
         <div className="contenedor2 mt-64 flex justify-center">
           <div className="text-6xl bg-indigo-300 p-4 rounded-3xl border-2 border-r-8 border-b-8 border-indigo-950">
             <h1 className="font-bold">{confirmacion}</h1>
@@ -286,7 +331,7 @@ const RegisterUser = () => {
       {showForm && (
         <div className="contenedor2">
           <div className="divTitulo">
-            <h1 className="titulo">Registro De Usuario</h1>
+            <h1 className="title">Registro De Usuario</h1>
           </div>
           {perror && (
             <div className="error">
@@ -295,11 +340,14 @@ const RegisterUser = () => {
           )}
           <div>
             <form onSubmit={handleCrear}>
-              <section className="form">
-                <h1 className="subTitulo">Datos Personales</h1>
+              <section className="sectionform">
+                <h1 className="title2">Datos Personales</h1>
                 <section className="sectionGlobal">
                   <section className="section">
-                    <label className="label">Nombre:</label>
+                    <div className="divlabel">
+                      <label className="label">Nombre:</label>
+                    </div>
+                    <div className="divinput">
                     <input
                       type="text"
                       placeholder="Casimira"
@@ -308,10 +356,14 @@ const RegisterUser = () => {
                       onChange={handleNombre}
                       className="input"
                     />
+                    </div>
                   </section>
                   {error && <div className="error">{error.nombre}</div>}
                   <section className="section">
-                    <label className="label">Apellido:</label>
+                    <div className="divlabel">
+                      <label className="label">Apellido:</label>
+                    </div>
+                    <div className="divinput">
                     <input
                       type="text"
                       placeholder="La Visca"
@@ -320,22 +372,32 @@ const RegisterUser = () => {
                       onChange={handleApellido}
                       className="input"
                     />
+                    </div>
                   </section>
                   {error && <div className="error">{error.apellido}</div>}
                   <section className="section">
-                    <label className="label">Nacionalidad:</label>
+                    <div className="divlabel">
+                      <label className="label">Nacionalidad:</label>
+                    </div>
+                    <div className="divinput">
                     <select className="select" onChange={handleNacionalidad}>
-                      <option value="" hidden>selecciones un pais</option>
+                      <option value="" hidden>
+                        selecciones un pais
+                      </option>
                       {paises.map((pais) => (
                         <option value={pais} name="nacionalidad" key={pais}>
                           {pais}
                         </option>
                       ))}
                     </select>
+                    </div>
                   </section>
                   {error && <div className="error">{error.nacionalidad}</div>}
-                  <section className=" grid grid-cols-2">
-                    <label className="label">Numero De Cedula:</label>
+                  <section className="section">
+                    <div className="divlabel">
+                      <label className="label">Numero De Cedula:</label>
+                    </div>
+                    <div className="divinput">
                     <input
                       type="number"
                       placeholder="1234567890"
@@ -344,10 +406,14 @@ const RegisterUser = () => {
                       onChange={handleCedula}
                       className="input no-spin"
                     />
+                    </div>
                   </section>
                   {error && <div className="error">{error.cedula}</div>}
-                  <section className=" grid grid-cols-2">
-                    <label className="label">Fecha De Nacimiento:</label>
+                  <section className="section">
+                    <div className="divlabel">
+                      <label className="label">Fecha De Nacimiento:</label>
+                    </div>
+                    <div className="divinput">
                     <DatePicker
                       selected={selectedDate}
                       onChange={handleFechaDeNacimiento}
@@ -365,14 +431,15 @@ const RegisterUser = () => {
                       }}
                       customInput={
                         <input
-                          type="text"
-                          className="input"
-                          name="fechaDeNacimiento"
-                          value={selectedDate}
-                          onChange={handleFechaDeNacimiento}
+                        type="text"
+                        className="input"
+                        name="fechaDeNacimiento"
+                        value={selectedDate}
+                        onChange={handleFechaDeNacimiento}
                         />
                       }
-                    />
+                      />
+                    </div>
                   </section>
                   {error && (
                     <div className="error">{error.fechaDeNacimiento}</div>
@@ -380,11 +447,14 @@ const RegisterUser = () => {
                 </section>
               </section>
 
-              <section className="form">
-                <h1 className="subTitulo">Datos De Contacto:</h1>
+              <section className="sectionform">
+                <h1 className="title2">Datos De Contacto:</h1>
                 <section className="sectionGlobal">
                   <section className="section">
-                    <label className="label">Telefono:</label>
+                    <div className="divlabel">
+                      <label className="label">Telefono:</label>
+                    </div>
+                    <div className="divinput">
                     <input
                       type="number"
                       placeholder="310 000 00 00"
@@ -393,10 +463,14 @@ const RegisterUser = () => {
                       onChange={handleTelefono}
                       className="input no-spin"
                     />
+                    </div>
                   </section>
                   {error && <div className="error">{error.telefono}</div>}
                   <section className="section">
-                    <label className="label">WhatsApp:</label>
+                    <div className="divlabel">
+                      <label className="label">WhatsApp:</label>
+                    </div>
+                    <div className="divinput">
                     <input
                       type="number"
                       // readOnly='false'
@@ -407,10 +481,14 @@ const RegisterUser = () => {
                       min="+"
                       className="input no-spin"
                     />
+                    </div>
                   </section>
                   {error && <div className="error">{error.whatsapp}</div>}
                   <section className="section">
-                    <label className="label">Direccion:</label>
+                    <div className="divlabel">
+                      <label className="label">Direccion:</label>
+                    </div>
+                    <div className="divinput">
                     <input
                       type="text"
                       placeholder="calle 1W # 57-68"
@@ -419,13 +497,62 @@ const RegisterUser = () => {
                       onChange={handleDireccion}
                       className="input"
                     />
+                    </div>
                   </section>
                   {error && <div className="error">{error.direccion}</div>}
+                  <section className="section">
+                    <div className="divlabel">
+                      <label className="label">UserName:</label>
+                    </div>
+                    <div className="divinput">
+                    <input
+                      type="text"
+                      placeholder="un ejemplo"
+                      value={input.session}
+                      name="session"
+                      onChange={handleSession}
+                      className="input"
+                    />
+                    </div>
+                  </section>
+                  {error && <div className="error">{error.session}</div>}
+                  <section className="section">
+                    <div className="divlabel">
+                      <label className="label">Contraseña:</label>
+                    </div>
+                    <div className="divinput">
+                    <input
+                      type="password"
+                      placeholder="escriba una contraseña"
+                      value={input.password}
+                      name="password"
+                      onChange={handlePassword}
+                      className="input"
+                    />
+                    </div>
+                  </section>
+                  {error && <div className="error">{error.password}</div>}
+                  <section className="section">
+                    <div className="divlabel">
+                      <label className="label">Verificacion Contraseña:</label>
+                    </div>
+                    <div className="divinput">
+                    <input
+                      type="password"
+                      placeholder="escriba la contraseña"
+                      value={input.verify}
+                      name="verify"
+                      onChange={handleVerify}
+                      className="input"
+                    />
+                    </div>
+                  </section>
+                  {error && <div className="error">{error.verify}</div>}
                 </section>
               </section>
 
-              <section>
-                <button className="btn-w" type="submit">
+              <section className="sectionbtns">
+                <button className="btns" type="submit">
                   <BiSend className="BiSend" />
                 </button>
               </section>

@@ -11,6 +11,7 @@ const Ventas = () => {
   const productos = useSelector((state) => state.productos);
   const allUserIdName = useSelector((state) => state.allUserIdName);
   const quincenas = useSelector((state) => state.quincenas);
+  const token = useSelector(state => state.token)
   const [quincenaId, setQuincenaId] = useState("");
   const [userId, setUserId] = useState("");
   const [venta, setVenta] = useState([]);
@@ -19,9 +20,9 @@ const Ventas = () => {
   const [cuotas, setCuotas] = useState({});
 
   useEffect(() => {
-    dispatch(searchProducto());
-    dispatch(getAllQuincena());
-    dispatch(getAllUserIdName());
+    dispatch(searchProducto(token));
+    dispatch(getAllQuincena(token));
+    dispatch(getAllUserIdName(token));
   }, [dispatch]);
 
   const handleVentas = (producto) => {
@@ -155,7 +156,7 @@ const Ventas = () => {
 
   const handleSubmit = () => {
     if (venta.length >= 1) {
-      dispatch(postVenta(venta));
+      dispatch(postVenta(venta, token));
       setVenta([]);
       setQuincenaId("");
       setUserId("");
@@ -165,8 +166,8 @@ const Ventas = () => {
     }
   };
   return (
-    <div className="contenedorVentas pt-12">
-      <div className="contenedorVentas2 overflow-x-auto">
+    <div className="contenedor">
+      <div className="contenedor1 overflow-x-auto">
         <div className="divTitulo">
           <h1 className="titulo">VENTAS DE PRODUCTOS</h1>
         </div>

@@ -1,9 +1,6 @@
 import axios from "axios";
 import {
   PERROR,
-  GERROR,
-  GAD,
-  GPA,
   PAD,
   PPA,
   RESETERROR,
@@ -15,11 +12,15 @@ const CAD = import.meta.env.VITE_REACT_APP_CAD;
 const CPAD = import.meta.env.VITE_REACT_APP_CPAD;
 const DELETE = import.meta.env.VITE_REACT_APP_URL_DELETE;
 
-export const pad = (coad) => {
+export const pad = (coad, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${CAD}`;
-      const { data } = await axios.post(endpoint, { coad });
+      const { data } = await axios.post(endpoint, {coad}, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: PAD,
         payload: data,
@@ -33,29 +34,15 @@ export const pad = (coad) => {
   };
 };
 
-export const gad = () => {
-  return async (dispatch) => {
-    try {
-      const endpoint = `${URL}/${CAD}`;
-      const { data } = await axios.get(endpoint);
-      dispatch({
-        type: GAD,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: GERROR,
-        payload: error,
-      });
-    }
-  };
-};
-
-export const ppad = (copad) => {
+export const ppad = (copad, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${CAD}/${CPAD}`;
-      const { data } = await axios.post(endpoint, { copad });
+      const { data } = await axios.post(endpoint, {copad}, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: PPA,
         payload: data,
@@ -63,35 +50,21 @@ export const ppad = (copad) => {
     } catch (error) {
       dispatch({
         type: PERROR,
-        payload: error,
+        payload: error.response.data.error,
       });
     }
   };
 };
 
-export const gpad = () => {
-  return async (dispatch) => {
-    try {
-      const endpoint = `${URL}/${CAD}/${CPAD}`;
-      const { data } = await axios.get(endpoint);
-      dispatch({
-        type: GPA,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: GERROR,
-        payload: error,
-      });
-    }
-  };
-};
-
-export const deleteCorte = (id) => {
+export const deleteCorte = (id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${CAD}/${DELETE}/${id}`;
-      const { data } = await axios.delete(endpoint);
+      const { data } = await axios.delete(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: DELETEC,
         payload: data,
@@ -99,7 +72,7 @@ export const deleteCorte = (id) => {
     } catch (error) {
       dispatch({
         type: PERROR,
-        payload: error,
+        payload: error.response.data.error,
       });
     }
   };

@@ -1,40 +1,26 @@
 import axios from "axios";
-import { PVX, PERROR, GERROR, GVX } from "../../actionsTypes.js";
+import { PVX, PERROR } from "../../actionsTypes.js";
 
 const URL = import.meta.env.VITE_REACT_APP_URL;
 const VX = import.meta.env.VITE_REACT_APP_VX;
 
-export const pvx = (covx) => {
+export const pvx = (covx, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${VX}`;
-      const { data } = await axios.post(endpoint, { covx });
+      const { data } = await axios.post(endpoint, {covx}, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: PVX,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: ERROR,
-        payload: error,
-      });
-    }
-  };
-};
-
-export const gvx = () => {
-  return async (dispatch) => {
-    try {
-      const endpoint = `${URL}/${VX}`;
-      const { data } = await axios.get(endpoint);
-      dispatch({
-        type: GVX,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: ERROR,
-        payload: error,
+        type: PERROR,
+        payload: error.response.data.error,
       });
     }
   };

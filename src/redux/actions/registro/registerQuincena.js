@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import {
   POSTQUINCENA,
   GETALLQUINCENA,
@@ -14,16 +13,22 @@ const URL = import.meta.env.VITE_REACT_APP_URL;
 const QUINCENA = import.meta.env.VITE_REACT_APP_URL_QUINCENA;
 const QUINCENAUSER = import.meta.env.VITE_REACT_APP_QUINCENAUSER;
 
-export const postQuincena = (quincena) => {
+
+export const postQuincena = (quincena, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${QUINCENA}`;
-      const { data } = await axios.post(endpoint, quincena);
+      const { data } = await axios.post(endpoint, quincena, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: POSTQUINCENA,
         payload: data,
       });
     } catch (error) {
+      console.log(error);
       dispatch({
         type: PERROR,
         payload: error,
@@ -32,11 +37,15 @@ export const postQuincena = (quincena) => {
   };
 };
 
-export const getAllQuincena = () => {
+export const getAllQuincena = (token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${QUINCENA}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: GETALLQUINCENA,
         payload: data,
@@ -50,11 +59,15 @@ export const getAllQuincena = () => {
   };
 };
 
-export const getQuincenaById = (id) => {
+export const getQuincenaById = (id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${QUINCENA}/${id}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: GETBIQUINCENA,
         payload: data,
@@ -68,11 +81,15 @@ export const getQuincenaById = (id) => {
   };
 };
 
-export const searchUserByFortnight = (ids, id) => {
+export const searchUserByFortnight = (ids, id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${QUINCENAUSER}/${ids}/${id}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: QUINCENAUSERS,
         payload: data,
@@ -86,11 +103,15 @@ export const searchUserByFortnight = (ids, id) => {
   };
 };
 
-export const searchAllUserByFortnight = (id) => {
+export const searchAllUserByFortnight = (id, token) => {
   return async (dispatch) => {
     try {
       const endpoint = `${URL}/${QUINCENAUSER}/${id}`;
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.get(endpoint, {
+        headers: {
+          Authorization: token,
+        },
+      });
       dispatch({
         type: QUINCENAHOME,
         payload: data,

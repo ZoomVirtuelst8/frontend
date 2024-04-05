@@ -15,10 +15,12 @@ const Skype = () => {
   const reporte = useSelector((state) => state.spg);
   const errors = useSelector((state) => state.error);
   const quincenas = useSelector((state) => state.quincenas);
+  const token = useSelector((state) => state.token);
+
   const [id, setId] = useState("");
 
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
 
   useEffect(() => {
@@ -99,7 +101,7 @@ const Skype = () => {
   };
 
   const handlerSubmit = () => {
-    dispatch(psk(cosk));
+    dispatch(psk(cosk, token));
     setInput([]);
     setCosk([]);
   };

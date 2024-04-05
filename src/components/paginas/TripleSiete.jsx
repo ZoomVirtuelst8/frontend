@@ -12,12 +12,14 @@ const TripleSiete = () => {
   const reporte = useSelector((state) => state.spg);
   const errors = useSelector((state) => state.error);
   const quincenas = useSelector((state) => state.quincenas);
+  const token = useSelector((state) => state.token);
+
   const [input, setInput] = useState([]);
   const [tripleSiete, setTripleSiete] = useState(input);
   const [id, setId] = useState("");
 
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
 
   useEffect(() => {
@@ -78,7 +80,7 @@ while ((match = regex.exec(event.target.value)) !== null) {
     });
   };
   const handleSubmit = () => {
-    dispatch(postTripleSiete(tripleSiete));
+    dispatch(postTripleSiete(tripleSiete, token));
     setInput([]);
     setTripleSiete([]);
   };

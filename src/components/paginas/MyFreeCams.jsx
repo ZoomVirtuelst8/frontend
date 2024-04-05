@@ -12,6 +12,8 @@ const MyFreeCams = () => {
   const reporte = useSelector((state) => state.spg);
   const errors = useSelector((state) => state.error);
   const quincenas = useSelector((state) => state.quincenas);
+  const token = useSelector((state) => state.token);
+
   const [input, setInput] = useState([]);
   const [myFreeCams, setMyFreeCams] = useState(input);
   const [id, setId] = useState("");
@@ -21,7 +23,7 @@ const MyFreeCams = () => {
   }, [id]);
 
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
 
   useEffect(() => {
@@ -78,7 +80,7 @@ const MyFreeCams = () => {
   };
 
   const handleSubmit = () => {
-    dispatch(postMyFreeCams(myFreeCams));
+    dispatch(postMyFreeCams(myFreeCams, token));
     setInput([]);
     setMyFreeCams([]);
   };

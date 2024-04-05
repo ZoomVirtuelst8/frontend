@@ -1,29 +1,48 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { UserButton, useAuth } from "@clerk/clerk-react";
+import { createBrowserHistory } from "history";
+import { jwtDecode } from "jwt-decode";
+import { useDispatch, useSelector } from "react-redux";
+import { cerrarSession } from "../../redux/actions/cerrarSession";
+const history = createBrowserHistory();
+import { TfiAlignJustify } from "react-icons/tfi";
 
 const NavBar = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const token = useSelector(state => state.token)
   const { pathname } = useLocation();
-  const user = useSelector((state) => state.user);
   const [showButton, setShowButton] = useState(false);
   const isUserOrModelRoute = /^\/(user|modelo)\/\d+$/i.test(pathname);
-  const isInvalidRoute = pathname.includes("/user/undefined") || pathname.includes("undefined");
-  const { isLoaded, userId, sessionId, getToken, onSignOut } = useAuth();
+  const isInvalidRoute =
+    pathname.includes("/user/undefined") || pathname.includes("undefined");
   // In case the user signs out while on the page.
-  if (!isLoaded || !userId) {
-    navigate("/");
-  }
+  //* para manejar la navbar responsive
+  const [showMenu, setShowMenu] = useState(false);
+
+  //* para saber que resolucion se esta manejando
+  const isScreenWidth = () => {
+    return window.innerWidth > 640;
+  };
+  // Decodifica el token para acceder a la información
+  const decodedToken =
+    token !== null ? jwtDecode(token) : history.push("/");
+  // decodedToken.admin = false;
+
   useEffect(() => {
-    if (Object.keys(user).length === 0) {
-      navigate('/')
+    if (token.length === 0) {
+      navigate("/");
     }
-    if (!isUserOrModelRoute && !user.admin && user.id && !pathname.includes('?')) {
-      navigate(`user/${user.id}`);
+    if (
+      !isUserOrModelRoute &&
+      !decodedToken.admin &&
+      decodedToken.id &&
+      !pathname.includes("?")
+    ) {
+      navigate(`user/${decodedToken.id}`);
     }
-    
-    if (user.admin) {
+
+    if (decodedToken.admin) {
       setShowButton(true);
     } else {
       setShowButton(false);
@@ -31,48 +50,102 @@ const NavBar = () => {
     if (isInvalidRoute) {
       navigate("/");
     }
-  }, [user, navigate, isUserOrModelRoute, user.admin]);
+  }, [
+    decodedToken.id,
+    decodedToken.admin,
+    navigate,
+    isInvalidRoute,
+    pathname,
+    isUserOrModelRoute,
+    token.length,
+  ]);
 
+  // para manejar la resolucion
+  useEffect(() => {
+    setShowMenu(isScreenWidth());
+    const handleResize = () => {
+      setShowMenu(isScreenWidth());
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+  //* para mostrar el menu
+  const toggleMenu = () => {
+    if (!isScreenWidth()) {
+      setShowMenu(!showMenu);
+    }
+  };
+  const handleNavLinkClick = () => {
+    if (!isScreenWidth()) {
+      setShowMenu(false);
+    }
+  };
+  //! cerra session
+  const handleSession = (e) => {
+    e.preventDefault();
+    sessionStorage.removeItem("accessToken");
+    dispatch(cerrarSession());
+    navigate("/");
+  };
   return (
-    <nav className="w-full bg-indigo-300 dark:bg-slate-700 p-1 px-6 text-lg flex justify-between h-12 items-center font-bold fixed top-0 z-10 ">
-      {showButton && (
-        <NavLink to="/home">
-          <button className="btn-n">Home</button>
-        </NavLink>
+    <div className="">
+      {showMenu && (
+        <nav className="navbar">
+          <div className={`${isScreenWidth() ? "flex items-center":"grid grid-cols-1 text-center"}`}>
+          {showButton && (
+            <NavLink to="/home">
+              <button className="btns" onClick={handleNavLinkClick}>
+                Home
+              </button>
+            </NavLink>
+          )}
+          {showButton && (
+            <NavLink to="/editar/producto">
+              <button className="btns" onClick={handleNavLinkClick}>
+                Editar Producto
+              </button>
+            </NavLink>
+          )}
+          {showButton && (
+            <NavLink to={"/crear"}>
+              <button className="btns" onClick={handleNavLinkClick}>
+                Registros
+              </button>
+            </NavLink>
+          )}
+          {showButton && (
+            <NavLink to={"/ventas"}>
+              <button className="btns" onClick={handleNavLinkClick}>
+                Ventas
+              </button>
+            </NavLink>
+          )}
+          {showButton && (
+            <NavLink to={"/modelo"}>
+              <button className="btns" onClick={handleNavLinkClick}>
+                Modelos
+              </button>
+            </NavLink>
+          )}
+         
+          <button onClick={handleSession} className="btnssesion">
+            {decodedToken.nombre} {''}
+            {decodedToken.apellido}
+          </button>
+          </div>
+        </nav>
       )}
-      {showButton && (
-        <NavLink to="/editar/producto">
-          <button className="btn-n">Editar Producto</button>
-        </NavLink>
-      )}
-      {showButton && (
-        <NavLink to={"/crear"}>
-          <button className="btn-n">Registros</button>
-        </NavLink>
-      )}
-      {showButton && (
-        <NavLink to={"/ventas"}>
-          <button className="btn-n">Ventas</button>
-        </NavLink>
-      )}
-      {/* {!showButton && (
-        <NavLink to={`/user/${user.id}`}>
-          <button className="btn-n">Estadisticas</button>
-        </NavLink>
-      )}
-      {!showButton && (
-        <NavLink to={`/modelo/${user.id}`}>
-          <button className="btn-n">Detalles</button>
-        </NavLink>
-      )} */}
-      {showButton && (
-        <NavLink to={"/modelo"}>
-          <button className="btn-n">Modelos</button>
-        </NavLink>
-      )}
-
-      <UserButton />
-    </nav>
+      <div
+        className={`sm:flex sm:justify-center dark:bg-slate-700 sm:text-center sm:items-center sm:mx-auto md:hidden ${
+          showMenu ? "hidden" : ""
+        }`}
+        onClick={toggleMenu}
+      >
+        <TfiAlignJustify />
+      </div>
+    </div>
   );
 };
 

@@ -19,9 +19,10 @@ const Moneda = () => {
   const dispatch = useDispatch();
   const quincenas = useSelector((state) => state.quincenas);
   const error = useSelector((state) => state.error);
+  const token = useSelector((state) => state.token);
 
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
 
   useEffect(() => {
@@ -95,24 +96,27 @@ const Moneda = () => {
     });
   };
 
-  const handleSubmit = () => {
-    dispatch(postMoneda(moneda));
-    navigate("/crear");
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    dispatch(postMoneda(moneda, token));
+    setTimeout(() => {
+      navigate("/crear");
+    }, 1000)
   };
 
   return (
-    <div className="contenedor1">
-      <div className="contenedor2">
+    <div className="contenedor">
+      <div>
         <div className="divTitulo">
           <h1 className="titulo">Registro De Moneda</h1>
         </div>
         <form onSubmit={handleSubmit}>
-          <section className="form ">
-            <section>
+          <section className="sectionform ">
+            <section className="divinput">
               <select
                 onChange={handleQuincena}
                 value={moneda.quincena}
-                className="selectMoneda"
+                className="select"
               >
                 <option value="" hidden>
                   Seleccione Una Quincena
@@ -127,11 +131,11 @@ const Moneda = () => {
               </select>
             </section>
 
-            <section className="m-2">
+            <section className="divinput">
               <select
                 onChange={handleDescripcion}
                 value={moneda.descripcion}
-                className="selectMoneda"
+                className="select"
               >
                 <option value="" hidden>
                   Moneda Para?
@@ -141,45 +145,61 @@ const Moneda = () => {
               </select>
             </section>
 
-            <section>
-              <h2>Modenda Para Pago</h2>
-              <section className="sectionMoneda">
-                <h1 className="h1Moneda">Dolar:</h1>
-                <input
-                  type="number"
-                  className="input no-spin max-w-xs"
-                  value={moneda.dolar}
-                  placeholder="valor del dolar"
-                  onChange={handlePagoDolar}
-                />
+            <section className="section">
+              <h2 className="text-center">Modenda Para: </h2>{" "}
+              <h2 className="text-center font-bold uppercase">
+                {moneda.descripcion}
+              </h2>
+              <section className="section">
+                <div className="divlabel">
+                  <label className="label">Dolar:</label>
+                </div>
+                <div className="divinput">
+                  <input
+                    type="number"
+                    className="input no-spin"
+                    value={moneda.dolar}
+                    placeholder="valor del dolar"
+                    onChange={handlePagoDolar}
+                  />
+                </div>
               </section>
-              <section className="sectionMoneda">
-                <h1 className="h1Moneda">Euro:</h1>
-                <input
-                  type="number"
-                  className="input no-spin max-w-xs"
-                  placeholder="valor del euro"
-                  value={moneda.euro}
-                  onChange={handlePagoEuro}
-                />
+              <section className="section">
+                <div className="divlabel">
+                  <label className="label">Euro:</label>
+                </div>
+                <div className="divinput">
+                  <input
+                    type="number"
+                    className="input no-spin"
+                    placeholder="valor del euro"
+                    value={moneda.euro}
+                    onChange={handlePagoEuro}
+                  />
+                </div>
               </section>
-              <section className="sectionMoneda">
-                <h1 className="h1Moneda">Libra Esterlina:</h1>
-                <input
-                  type="number"
-                  className="input no-spin max-w-xs"
-                  placeholder="valor del libra"
-                  value={moneda.libra}
-                  onChange={handlePagoLibra}
-                />
+              <section className="section">
+                <div className="divlabel">
+                  <label className="label">Libra Esterlina:</label>
+                </div>
+                <div className="div">
+                  {" "}
+                  <input
+                    type="number"
+                    className="input no-spin"
+                    placeholder="valor del libra"
+                    value={moneda.libra}
+                    onChange={handlePagoLibra}
+                  />
+                </div>
               </section>
-            </section>
-            <section className="flex items-center justify-center">
-              <button className="btn-w w-auto font-bold text-4xl" type="submit">
-                <BiSend />
-              </button>
             </section>
           </section>
+            <section className="sectionbtns">
+              <button className="btns" type="submit">
+                <BiSend className="BiSend"/>
+              </button>
+            </section>
         </form>
       </div>
     </div>

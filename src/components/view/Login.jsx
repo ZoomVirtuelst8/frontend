@@ -1,31 +1,30 @@
+
 import React, { useEffect } from "react";
-import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
-import { useClerk } from "@clerk/clerk-react";
 import { useDispatch } from "react-redux";
 import { cerrarSession } from "../../redux/actions/cerrarSession.js";
-
-const INIT = import.meta.env.VITE_REACT_APP_URL_INIT;
 
 const Login = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(cerrarSession());
-  },[dispatch]);
-  
-  return (
-    <div className="min-h-screen dark:bg-indigo-900 bg-indigo-200 ">
-      <div className="pt-48 flex flex-col justify-between items-center  ">
-        <h1 className="font-bold text-6xl animate-bounce">
-          BIENVENIDO A ZOOM VIRTUEL
-        </h1>
-        <h1 className="m-10 text-3xl font-bold">POR FAVOR INICIE SESION</h1>
+  }, [dispatch]);
 
-        <Link to={INIT}>
-          <button className="btn-w justify-between items-center border-2 border-black border-b-8 border-l-8 hover:scale-125">
-            <FcGoogle className=" text-9xl p-1 justify-between items-center" />
-          </button>
+  return (
+    <div className="contenedor">
+      <h1 className="titlelogin">zoom virtuel</h1>
+      <p className="font-bold text-center">
+        Bienvenido a Zoom Virtuel Studio Web Cam Quieres ser parte de nuestro
+        gran equipo de trabajo se puede contactar con nosotros enviando un
+        correo electronico o al whatsapp estaremos encantado de atenderle
+      </p>
+      <div className="conbtnslogin">
+        <Link to="/signIn">
+          <button className="btnslogin">Iniciar Sesion</button>
         </Link>
+        {/* <Link to="/registro">
+          <button className="btnslogin">Registrarse</button>
+        </Link> */}
       </div>
     </div>
   );

@@ -13,13 +13,15 @@ const IsLive = () => {
   const dispatch = useDispatch();
   const reporte = useSelector((state) => state.cil);
   const errors = useSelector((state) => state.error);
+  const token = useSelector((state) => state.token);
+
   const [input, setInput] = useState([]);
   const [coil, setCoil] = useState(input);
   const quincenas = useSelector((state) => state.quincenas);
   const [id, setId] = useState("");
 
   useEffect(() => {
-    dispatch(getAllQuincena());
+    dispatch(getAllQuincena(token));
   }, [dispatch]);
 
   useEffect(() => {
@@ -116,7 +118,7 @@ const IsLive = () => {
     setCoil(promocodes);
   };
   const handlerSubmit = () => {
-    dispatch(pil(coil));
+    dispatch(pil(coil, token));
     setInput([]);
     setCoil([]);
   };

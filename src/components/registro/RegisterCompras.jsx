@@ -41,6 +41,7 @@ const Compras = () => {
   const productos = useSelector((state) => state.productos);
   const perror = useSelector((state) => state.perror);
   const gerror = useSelector((state) => state.gerror);
+  const token = useSelector((state) => state.token);
   const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(true);
   const [confirmacion, setConfirmacion] = useState("");
@@ -53,11 +54,11 @@ const Compras = () => {
   });
 
   useEffect(() => {
-    dispatch(getAllProductos());
+    dispatch(getAllProductos(token));
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(resetError());
+    dispatch(resetError(token));
   }, [compra]);
 
   const handleProducto = (event) => {
@@ -125,11 +126,8 @@ const Compras = () => {
     e.preventDefault();
     const errores = validation(compra);
     if (Object.keys(errores).length === 0) {
-      await dispatch(postCompra(compra));
-      if (perror.length !== 0) {
-        setShowForm(true);
-      } else {
-        setConfirmacion("SE ENVIO LA SOLICITUD.");
+      await dispatch(postCompra(compra, token));
+        setConfirmacion("se envio la solicitud.");
         setTimeout(() => {
           setConfirmacion("");
           navigate("/crear");
@@ -143,52 +141,55 @@ const Compras = () => {
           cantidadDeCuotas: "",
         });
         setShowForm(false);
-      }
+      
     }
     setError(errores);
   };
   return (
-    <div className="contenedor1">
+    <div className="contenedor">
       {confirmacion && (
-        <div className="contenedor2 mt-64 flex justify-center">
-          <div className="text-6xl bg-indigo-300 p-4 rounded-3xl border-2 border-r-8 border-b-8 border-indigo-950">
-            <h1 className="font-bold">{confirmacion}</h1>
+        <div>
+          <div className="confirmation">
+            <h1>{confirmacion}</h1>
           </div>
         </div>
       )}
       {showForm && (
-        <div className="contenedor2">
+        <div>
           <div className="divTitulo">
             <h1 className="titulo">Registro De Compras</h1>
           </div>
-          {perror && (
+          {/* {perror && (
             <div className="error">
               <h1>{`${perror?.response?.data} ${perror?.message}`}</h1>
             </div>
-          )}
+          )} */}
           <div>
             <form onSubmit={handleSubmit}>
-              <section className="form">
-                <section className="sectionGlobal">
-                  {/*//? profucto */}
-                  <section className="sectionSelect">
-                    <select className="select" onChange={handleProducto}>
-                      <option value="">Seleccione El Producto</option>
-                      {productos &&
-                        productos?.map((producto) => {
-                          return (
-                            <option key={producto.id} name="producto">
-                              {producto.nombre}
-                            </option>
-                          );
-                        })}
-                    </select>
-                  </section>
-                  {error && <div className="error">{error?.producto}</div>}
+              <section className="sectionform">
+                {/*//? profucto */}
+                <section className="divinput">
+                  <select className="select" onChange={handleProducto}>
+                    <option value="">Seleccione El Producto</option>
+                    {productos &&
+                      productos?.map((producto) => {
+                        return (
+                          <option key={producto.id} name="producto">
+                            {producto.nombre}
+                          </option>
+                        );
+                      })}
+                  </select>
+                </section>
+                {error && <div className="error">{error?.producto}</div>}
 
-                  {/* //? cantidad */}
-                  <section className="section">
+                {/* //? cantidad */}
+                <section className="section">
+                  <div className="divlabel">
                     <label className="label">Cantidad:</label>
+                  </div>
+
+                  <div className="divinput">
                     <input
                       type="number"
                       name="cantidad"
@@ -197,12 +198,16 @@ const Compras = () => {
                       className="no-spin input"
                       min="1"
                     />
-                  </section>
-                  {error && <div className="error">{error.cantidad}</div>}
+                  </div>
+                </section>
+                {error && <div className="error">{error.cantidad}</div>}
 
-                  {/* //? precio comprea */}
-                  <section className="section">
+                {/* //? precio comprea */}
+                <section className="section">
+                  <div className="divlabel">
                     <label className="label">Precio De Compra: </label>
+                  </div>
+                  <div className="divinput">
                     <input
                       name="precioCompra"
                       type="number"
@@ -211,12 +216,16 @@ const Compras = () => {
                       min="1"
                       className="no-spin input"
                     />
-                  </section>
-                  {error && <div className="error">{error.precioCompra}</div>}
+                  </div>
+                </section>
+                {error && <div className="error">{error.precioCompra}</div>}
 
-                  {/* //? precio venta */}
-                  <section className="section">
+                {/* //? precio venta */}
+                <section className="section">
+                  <div className="divlabel">
                     <label className="label">Precio De Venta: </label>
+                  </div>
+                  <div className="divinput">
                     <input
                       name="precioVenta"
                       type="number"
@@ -225,12 +234,16 @@ const Compras = () => {
                       min="1"
                       className="no-spin input"
                     />
-                  </section>
-                  {error && <div className="error">{error.precioVenta}</div>}
+                  </div>
+                </section>
+                {error && <div className="error">{error.precioVenta}</div>}
 
-                  {/* //? precio diferido */}
-                  <section className="section">
+                {/* //? precio diferido */}
+                <section className="section">
+                  <div className="divlabel">
                     <label className="label">Precio De Venta Diferido: </label>
+                  </div>
+                  <div className="divinput">
                     <input
                       name="precioDiferido"
                       type="number"
@@ -239,13 +252,13 @@ const Compras = () => {
                       min="1"
                       className="no-spin input"
                     />
-                  </section>
-                  {error && <div className="error">{error.precioDiferido}</div>}
+                  </div>
                 </section>
+                {error && <div className="error">{error.precioDiferido}</div>}
               </section>
               {/*//! boton send */}
-              <section>
-                <button className="btn-w" type="submit">
+              <section className="sectionbtns">
+                <button className="btns" type="submit">
                   <BiSend className="BiSend" />
                 </button>
               </section>
