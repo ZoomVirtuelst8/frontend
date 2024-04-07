@@ -1,8 +1,6 @@
 {
-  "redirects": [
-    {
-      "source": "^(www\\.zoomvirtuel\\.com)/(.*)",
-      "destination": "/:path*"
-    }
+  "rewrites": [
+    { "source": "/old-path", "destination": "/new-path" }
   ]
 }
+
