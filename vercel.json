@@ -1,8 +1,10 @@
 {
   "redirects": [
     {
-      "source": "/(.*)",
-      "destination": "/"
+      "source": "^(www\\.zoomvirtuel\\.com)/(.*)",
+      "destination": "/:path*",
+      "permanent": true,
+      "caseSensitive": true
     }
   ]
 }
