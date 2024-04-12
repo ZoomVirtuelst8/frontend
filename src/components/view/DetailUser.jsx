@@ -15,24 +15,25 @@ const DetailUser = () => {
   const paginas = useSelector((state) => state.paginas);
   const token = useSelector((state) => state.token);
   const id = useSelector((state) => state.Id);
-  userBI.userName = [];
-  for (const user of userBI.useres) {
-    for (const pagina of paginas) {
-      if (pagina.id === user.pagina) {
-        userBI.userName.push({
-          pagina: pagina.nombrePagina,
-          userName: user.userName,
-        });
-      }
-    }
-  }
-  userBI.userName.sort((a, b) => a.pagina.localeCompare(b.pagina));
   useEffect(() => {
     if (id) {
       dispatch(getUserBI(id, token));
       dispatch(getAllPagina(token));
     }
   }, [id, dispatch]);
+  
+  userBI?.userName = [];
+  for (const user of userBI?.useres) {
+    for (const pagina of paginas) {
+      if (pagina?.id === user?.pagina) {
+        userBI?.userName.push({
+          pagina: pagina?.nombrePagina,
+          userName: user?.userName,
+        });
+      }
+    }
+  }
+  userBI?.userName?.sort((a, b) => a?.pagina.localeCompare(b?.pagina));
 
   const fecha = new Date(userBI?.createdAt);
 
