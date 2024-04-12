@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 //importaciones de funciones desde el redux
 import { registroUserAuth } from "../../redux/actions/registro/registerUser.js";
 import { resetError } from "../../redux/actions/resetError.js";
+import ButtonAtras from "../resource/ButtonAtras.jsx";
 // vaidaciones de inputs
 const validacion = (input) => {
 let error = {};
@@ -316,6 +317,7 @@ const RegisterUserAuth = () => {
   const paises = ["Colombia", "Venezuela"];
   return (
     <div className="contenedor">
+      <ButtonAtras />
       {showConfirmation && (
         <div className="contenedor2 mt-64 flex justify-center">
           <div className="text-6xl bg-indigo-300 p-4 rounded-3xl border-2 border-r-8 border-b-8 border-indigo-950">

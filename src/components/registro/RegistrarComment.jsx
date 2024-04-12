@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { BiSend } from "react-icons/bi";
+import { FcCancel } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import { postComment } from "../../redux/actions/registro/registerComment.js";
 
@@ -26,6 +27,13 @@ const RegistrarComment = () => {
   const handleSubmit = () => {
     dispatch(postComment(comments, token));
     navigate(`/modelo/${id}`);
+  };
+  const handleCancelar = () => {
+    setComments({
+      comment: "",
+      userId: id,
+    });
+    navigate(`/modelo`);
   };
   return (
     <div className="contenedor">
@@ -57,6 +65,9 @@ const RegistrarComment = () => {
             <button type="submit" className="btns">
               <BiSend className="BiSend" />
             </button>
+            <button className="btns" onClick={handleCancelar}>
+            <FcCancel className="text-4xl" />
+          </button>
           </section>
         </form>
       </div>

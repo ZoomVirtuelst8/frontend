@@ -28,7 +28,6 @@ export const postQuincena = (quincena, token) => {
         payload: data,
       });
     } catch (error) {
-      console.log(error);
       dispatch({
         type: PERROR,
         payload: error,

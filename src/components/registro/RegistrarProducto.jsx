@@ -7,6 +7,7 @@ import {
   getAllProductos,
   postProducto,
 } from "../../redux/actions/registro/registerProductos.js";
+import ButtonAtras from "../resource/ButtonAtras.jsx";
 
 const valida = (nombre, productos) => {
   let error = "";
@@ -117,6 +118,7 @@ const RegistrarProducto = () => {
   };
   return (
     <div className="contenedor">
+      <ButtonAtras />
       {confirmacion && (
         <div>
           <h1>{confirmacion}</h1>

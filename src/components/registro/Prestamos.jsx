@@ -4,6 +4,7 @@ import { BiSend } from "react-icons/bi";
 import { getAllUserIdName } from "../../redux/actions/registro/registerUser";
 import { getAllQuincena } from "../../redux/actions/registro/registerQuincena";
 import { postPrestamos } from "../../redux/actions/registro/registerPrestamos";
+import ButtonAtras from "../resource/ButtonAtras";
 
 const Prestamos = () => {
   const dispatch = useDispatch();
@@ -85,6 +86,7 @@ const Prestamos = () => {
   };
   return (
     <div className="contenedor">
+      <ButtonAtras />
       <div>
         <div className="divTitulo">
           <h1 className="titulo">Registro De Prestamos</h1>

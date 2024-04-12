@@ -1,10 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ButtonAtras from "../resource/ButtonAtras";
 
 
 const CargarEstadisticas = () => {
   return (
     <div className="contenedor">
+      <ButtonAtras />
       <div className="">
       <h3 className="font-bold text-center text-xl sm:text-lg">
         Click en el Logo de la pagina que desea cargar

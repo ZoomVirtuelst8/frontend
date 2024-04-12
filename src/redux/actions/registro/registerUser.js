@@ -31,7 +31,6 @@ export const registroUser = (input) => {
         payload: data,
       });
     } catch (error) {
-      console.log(error)
       const errorMessage = handleError(error)
       dispatch({
         type: ERROR,
@@ -54,7 +53,6 @@ export const registroUserAuth = (input, token) => {
         payload: data,
       });
     } catch (error) {
-      console.log(error)
       const errorMessage = handleError(error)
       dispatch({
         type: ERROR,

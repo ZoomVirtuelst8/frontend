@@ -8,6 +8,7 @@ import {
   getAllQuincena,
 } from "../../redux/actions/registro/registerQuincena.js";
 import { useNavigate } from "react-router-dom";
+import ButtonAtras from "../resource/ButtonAtras.jsx";
 
 const RegistrarQuincena = () => {
   const dispatch = useDispatch();
@@ -113,6 +114,7 @@ const RegistrarQuincena = () => {
 
   return (
     <div className="contenedor">
+      <ButtonAtras />
       <div>
         <div className="divTitulo">
           <h1 className="titulo">Registro De Quincenas</h1>

@@ -350,7 +350,6 @@ const Home = () => {
   };
 
   const sectionRef = useRef([]);
-  console.log(quincenaHome)
   return (
     <div className="contenedor1">
       <div className="contenedor2">

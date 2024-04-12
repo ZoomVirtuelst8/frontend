@@ -59,7 +59,7 @@ export const getPrestamoById = (id, token) => {
 export const updatePrestamo = (id, nPrestamo, token) => {
   return async (dispatch) => {
     try {
-      const endpoint = `${URL}/${PRESTAMOS}/${id, token}`;
+      const endpoint = `${URL}/${PRESTAMOS}/${id}`;
       const { data } = await axios.put(endpoint, nPrestamo, {
         headers: {
           Authorization: token,

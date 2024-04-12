@@ -38,7 +38,7 @@ const handleDelete = (id) => {
         </div>
 
         {productos && (
-          <div className="grid md:grid-cols-4 sm:grid-cols-1 px-2 m-2">
+          <div className="grid md:grid-cols-3 sm:grid-cols-1 lg:grid-cols-4 px-2 m-2">
             {productos?.map((producto) => {
               return (
                 <div

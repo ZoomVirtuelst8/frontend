@@ -5,6 +5,7 @@ const Crear = () => {
   return (
     <div className="contenedor">
       <div className="text-center">
+        
         <div className="divTitulo">
 
         <h1 className="titulo">Que Desea Hacer Hoy</h1>

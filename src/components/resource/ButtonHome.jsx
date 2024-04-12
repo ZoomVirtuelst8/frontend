@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 const ButtonHome = () => {
   return (
-    <div className="bg-indigo-400 dark:bg-slate-700 rounded-xl border-4 m-2 border-indigo-300 dark:border-black w-20 absolute">
+    <div className="fixed top-14 left-5">
       <Link to="/home">
-        <button className="btns">Home</button>
+        <button className="btns text-xl">Ir A Home</button>
       </Link>
     </div>
   );

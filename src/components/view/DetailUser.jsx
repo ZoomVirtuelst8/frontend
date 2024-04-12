@@ -15,11 +15,22 @@ const DetailUser = () => {
   const paginas = useSelector((state) => state.paginas);
   const token = useSelector((state) => state.token);
   const id = useSelector((state) => state.Id);
-
+  userBI.userName = [];
+  for (const user of userBI.useres) {
+    for (const pagina of paginas) {
+      if (pagina.id === user.pagina) {
+        userBI.userName.push({
+          pagina: pagina.nombrePagina,
+          userName: user.userName,
+        });
+      }
+    }
+  }
+  userBI.userName.sort((a, b) => a.pagina.localeCompare(b.pagina));
   useEffect(() => {
     if (id) {
-    dispatch(getUserBI(id, token));
-    dispatch(getAllPagina(token));
+      dispatch(getUserBI(id, token));
+      dispatch(getAllPagina(token));
     }
   }, [id, dispatch]);
 
@@ -37,115 +48,127 @@ const DetailUser = () => {
 
   return (
     <div className="contenedor">
-      <div className="">
-        {/* <section className="absolute ml-2 left-0  font-bold">
-          <Link to={`/modelo/comment/${userBI.id}`}>
-            <p>comentario</p>
-            <div className="flex items-center justify-center">
-              <AiOutlineContainer className=" text-5xl btn-n" />
-            </div>
-          </Link>
-        </section> */}
+      <section className="fixed top-16 left-5  font-bold btns sm:text-xs md:text-md lg:text-base">
+        <Link to={`/modelo/comment/${userBI.id}`}>
+          <p>comentario</p>
+          <div className="flex items-center justify-center">
+            <AiOutlineContainer className=" lg:text-5xl sm:text-xl " />
+          </div>
+        </Link>
+      </section>
 
-        <section className="m-1 justify-center">
+      <div className="divTitulo">
+        <h1 className="title">Detalles de la modelo</h1>
+      </div>
+      <div className="grid md:grid-cols-3 sm:grid-cols-1">
+        <div className="">
+          <h1 className="uppercase text-2xl text-center font-bold">
+            modelo
+          </h1>
+          <section className="m-4">
           <div className="divDetail">
-            Nombre:
-            <p className=" detalle">{userBI?.nombre}</p>
+            <h1 className="detalle1">Nombre:</h1>
+            <p className="detalle">{userBI?.nombre}</p>
           </div>
           <div className="divDetail">
-            Apellido:
+            <h1 className="detalle1">Apellido:</h1>
             <p className="detalle">{userBI?.apellido}</p>
           </div>
           <div className="divDetail">
-            userName:
+            <h1 className="detalle1">userName:</h1>
             <p className="detalle">{userBI?.session}</p>
           </div>
           <div className="divDetail">
-            Nacionalidad:
+            <h1 className="detalle1">Nacionalidad:</h1>
             <p className="detalle">{userBI?.nacionalidad}</p>
           </div>
           <div className="divDetail">
-            Cedula:
+            <h1 className="detalle1">Cedula:</h1>
             <p className="detalle">{userBI?.cedula}</p>
           </div>
-
           <div className="divDetail">
-            Telefono:
+            <h1 className="detalle1">Telefono:</h1>
             <p className="detalle">{userBI?.telefono}</p>
           </div>
           <div className="divDetail">
-            WhatsApp:
+            <h1 className="detalle1">WhatsApp:</h1>
             <p className="detalle">{userBI?.whatsapp}</p>
           </div>
           <div className="divDetail">
-            Fecha De Nacmiento:
+            <h1 className="detalle1">Fecha De Nacmiento:</h1>
             <p className="detalle">{userBI?.fechaDeNacimiento}</p>
           </div>
           <div className="divDetail">
-            Fecha De Registro:
+            <h1 className="detalle1">Fecha De Registro:</h1>
             <p className="detalle">{fechaFormateada}</p>
           </div>
           <div className="divDetail">
-            Sitio De Trabajo:
+            <h1 className="detalle1">Sitio De Trabajo:</h1>
             <p className="detalle">{userBI?.p_ubicacion?.ubicacion}</p>
           </div>
           <div className="divDetail">
-            Porcentaje:
+            <h1 className="detalle1">Porcentaje:</h1>
             <p className="detalle">{userBI?.p_porcentaje?.nombre}</p>
           </div>
           <div className="divDetail">
-            Direccion:
+            <h1 className="detalle1">Direccion:</h1>
             <p className="detalle">{userBI?.direccion}</p>
           </div>
           <div className="divDetail">
-            Administrador:
-            <p className="detalle">
-              {userBI?.admin ? "Es un administrador" : "No es Administrador"}
-            </p>
-          </div>
-          </section>
-
-          <section>
-          <div>
-            {userBI.useres?.map((x) => {
-              return (
-                <div key={x.id}>
-                  <div className="divDetail">
-                    {paginas.map((pagina) => {
-                      if (pagina.id === x.pagina) {
-                        return (
-                          <div key={pagina.id}>{pagina.nombrePagina}:</div>
-                        );
-                      }
-                      return null;
-                    })}
-                    <div className="flex items-center ">
-                      <Link to={`/editar/username/${x.id}`}>
-                        <p className=" text-left mx-5 detalles">{x.userName}</p>
-                      </Link>
-                      <button
-                        className="btns w-10"
-                        onClick={() => handleDelete(x.id)}
-                      >
-                        <RiDeleteBin6Line className="text-2xl" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-            {userBI.comments?.map((x) => {
-              return (
-                <div key={x.id}>
-                  <div className="divDetail ">
-                    Cometario creado: {x.createdAt}:
-                    <p className=" text-left mx-5 detalles">{x.comment}</p>
-                  </div>
-                </div>
-              );
-            })}
+            <h1 className="detalle1">Admind:</h1>
+            <p className="detalle">{userBI?.admin ? "SI" : "NO"}</p>
           </div>
         </section>
+        </div>
+        
+
+        <div>
+        <h1 className="uppercase text-2xl text-center font-bold">
+            pagina y userName
+          </h1>
+          <section className="m-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {userBI.userName?.map((x, index) => {
+              return (
+                <div key={index + 1}>
+                  <div className="grid sm:grid-cols-1 md:grid-cols-1 bg-indigo-300 dark:bg-slate-700 m-1">
+                    <h1 className="sm:text-center">{x.pagina}</h1>
+                    <Link to={`/editar/username/${x.id}`}>
+                      <p className="sm:text-center">{x.userName}</p>
+                    </Link>
+                    <button className="btns" onClick={() => handleDelete(x.id)}>
+                      <RiDeleteBin6Line className="text-2xl mx-auto" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </section>
+        </div>
+        <div>
+        <h1 className="uppercase text-2xl text-center font-bold">
+            comentarios
+          </h1>
+          <section className="m-4">
+          {userBI.comments?.map((x) => {
+            const fecha = new Date(x?.createdAt);
+
+            const dia = fecha.getDate();
+            const mes = fecha.getMonth() + 1; // Los meses comienzan desde 0, así que sumamos 1
+            const ano = fecha.getFullYear().toString().slice(2);
+            const fechaFormateada = `${dia}/${mes}/${ano}`;
+            return (
+              <div key={x.id}>
+                <div className="divDetail ">
+                  <h1 className="text-center font-bold ">{fechaFormateada}:</h1>
+                  
+                  <p className=" text-justify mx-5 detalles">{x.comment}</p>
+                </div>
+              </div>
+            );
+          })}
+        </section>
+        </div>
+        
       </div>
     </div>
   );

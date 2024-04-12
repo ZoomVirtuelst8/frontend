@@ -20,6 +20,10 @@ export default {
         lg: '976px',
         xl: '1440px',
       },
+      height: {
+        custom: "95.3vh",
+        "min-h-custom": "95.3vh",
+      },
     },
   },
   plugins: [],

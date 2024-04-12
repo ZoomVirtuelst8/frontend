@@ -13,10 +13,9 @@ import { saveID } from "../../redux/actions/id.js";
 const Modelos = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const token = useSelector(state => state.token)
+  const token = useSelector((state) => state.token);
   const actual = jwtDecode(token);
   const user = useSelector((state) => state.allUser);
-console.log(user)
   useEffect(() => {
     dispatch(getAllUser(token));
   }, [dispatch]);
@@ -29,21 +28,30 @@ console.log(user)
     dispatch(deleteUser(id, token));
     navigate("/home");
   };
-  console.log(actual)
   return (
     <div className="contenedor">
       <div className="contenedor2">
-        <section className="bg-indigo-100 p-2 flex sm:grid-cols-1 md:grid-cols-3  justify-between">
+        <div className="divTitulo">
+          <h1 className="title">Lista De Modelos</h1>
+        </div>
+        <section className="bg-indigo-100 dark:bg-slate-950 rounded-2xl p-2 grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-8 justify-between">
           {user?.map((user) => {
             if (actual.id === user.id) {
               return null;
             }
             return (
-              <div className="flex" key={user.id}>
-                <Link to={`/modelo/${user.session}`} onClick={() => dispatch(saveID(user.id))} key={user.id}>
+              <div
+                className="flex bg-indigo-300 dark:bg-black font-bold text-xl rounded-2xl m-2 px-2"
+                key={user.id}
+              >
+                <Link
+                  to={`/modelo/${user.session}`}
+                  onClick={() => dispatch(saveID(user.id))}
+                  key={user.id}
+                >
                   <div
                     key={user.id}
-                    className="bg-indigo-300 rounded-2xl m-2 max-w-sm text-left p-2 flex items-center "
+                    className=" m-2 max-w-sm text-left p-2 flex items-center"
                   >
                     <p>
                       {user && user?.nombre?.split(" ")[0]}{" "}

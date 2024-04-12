@@ -6,18 +6,18 @@
 /*todo GENERAL  */
 /* contenedores generales */
 .contenedor {
-  @apply min-h-screen bg-indigo-200 dark:bg-slate-900 dark:text-slate-300 flex justify-center items-center flex-col;
+  @apply min-h-screen  bg-indigo-200 dark:bg-slate-900 dark:text-slate-300 flex justify-center items-center flex-col;
 }
 .contenedor1 {
   @apply  bg-indigo-200 dark:bg-slate-900 dark:text-slate-300 min-h-screen top-0 text-center;
 }
 /* botones generales */
 .btns {
-  @apply p-1 font-bold px-2 m-1 bg-amber-100 dark:bg-gray-500 rounded-xl hover:bg-amber-300 dark:hover:bg-gray-700 dark:hover:text-white  active:bg-indigo-400 dark:active:bg-white dark:active:text-black cursor-pointer ;
+  @apply p-1 font-bold px-2 m-1 bg-amber-100 dark:bg-gray-300 dark:text-black dark:border-4 dark:border-black rounded-xl hover:bg-amber-300 dark:hover:bg-gray-700 dark:hover:text-white  active:bg-indigo-400 dark:active:bg-white dark:active:text-black cursor-pointer ;
 }
 /* botones cerrar sesion */
 .btnssesion {
-  @apply w-fit px-2 h-11 uppercase text-sm rounded-xl p-1 font-bold  m-1 bg-black text-white dark:bg-white dark:text-black  hover:bg-gray-500 dark:hover:bg-gray-300 hover:text-white  active:bg-red-500 dark:active:bg-red-500 dark:active:text-black cursor-pointer ;
+  @apply w-fit px-2 h-8 uppercase text-sm rounded-xl p-1 font-bold  m-1 bg-red-500 text-white  border-4 border-black hover:border-red-700  hover:bg-gray-950 dark:hover:bg-gray-950 hover:text-white active:text-white active:bg-emerald-500 dark:active:bg-emerald-500 cursor-pointer ;
 }
 /* section de los formularios */
 .sectionform {
@@ -110,18 +110,19 @@
 }
 /* navbar */
 .navbar {
-  @apply  bg-indigo-300 dark:bg-slate-700 flex justify-center
+  @apply  bg-indigo-300 dark:bg-slate-700 flex justify-center min-h-12 
 }
 /*todo DETAIL USER  */
 .divDetail {
-  @apply grid grid-cols-2 text-right items-center font-bold text-2xl sm:text-lg border-b-2;
+  @apply grid grid-cols-2 items-center font-bold text-2xl sm:text-lg bg-indigo-300 dark:bg-slate-700 m-1;
 }
 .detalle {
-  @apply text-center uppercase sm:text-lg font-bold font-spartan;
+  @apply  sm:text-lg font-bold ;
 }
-.detalles {
-  @apply text-left mx-4 font-bold font-spartan;
+.detalle1 {
+  @apply  sm:text-lg font-bold text-right mx-4;
 }
+
 
 /*todo tabla home  */
 .dht {
@@ -171,7 +172,7 @@
   @apply bg-red-600
 }
 .btn-rojos {
-  @apply p-1 px-2  bg-red-500 rounded-xl font-sans hover:bg-red-800  active:bg-green-400 border-2 border-black;
+  @apply p-1 px-2  bg-red-500 rounded-xl font-sans hover:bg-red-800  active:bg-green-400 border-4 border-black dark:text-black font-bold;
 }
 /*todo los users  */
 .divPageUser {

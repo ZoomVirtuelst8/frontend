@@ -10,7 +10,8 @@ import { TfiAlignJustify } from "react-icons/tfi";
 const NavBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const token = useSelector(state => state.token)
+  const token = useSelector((state) => state.token);
+  const [cerrar, setCerrar] = useState(false)
   const { pathname } = useLocation();
   const [showButton, setShowButton] = useState(false);
   const isUserOrModelRoute = /^\/(user|modelo)\/\d+$/i.test(pathname);
@@ -22,11 +23,10 @@ const NavBar = () => {
 
   //* para saber que resolucion se esta manejando
   const isScreenWidth = () => {
-    return window.innerWidth > 640;
+    return window.innerWidth > 766;
   };
   // Decodifica el token para acceder a la información
-  const decodedToken =
-    token !== null ? jwtDecode(token) : history.push("/");
+  const decodedToken = token !== null ? jwtDecode(token) : history.push("/");
   // decodedToken.admin = false;
 
   useEffect(() => {
@@ -77,11 +77,21 @@ const NavBar = () => {
       setShowMenu(!showMenu);
     }
   };
+  const handleMenuToggle = () => {
+    setShowMenu(!showMenu);
+  };
+
+  const handleMenuClose = () => {
+    setShowMenu(false);
+  };
   const handleNavLinkClick = () => {
     if (!isScreenWidth()) {
       setShowMenu(false);
     }
   };
+  const handleCerrar = () => {
+    setCerrar(!cerrar)
+  }
   //! cerra session
   const handleSession = (e) => {
     e.preventDefault();
@@ -93,57 +103,66 @@ const NavBar = () => {
     <div className="">
       {showMenu && (
         <nav className="navbar">
-          <div className={`${isScreenWidth() ? "flex items-center":"grid grid-cols-1 text-center"}`}>
-          {showButton && (
-            <NavLink to="/home">
-              <button className="btns" onClick={handleNavLinkClick}>
-                Home
-              </button>
-            </NavLink>
-          )}
-          {showButton && (
-            <NavLink to="/editar/producto">
-              <button className="btns" onClick={handleNavLinkClick}>
-                Editar Producto
-              </button>
-            </NavLink>
-          )}
-          {showButton && (
-            <NavLink to={"/crear"}>
-              <button className="btns" onClick={handleNavLinkClick}>
-                Registros
-              </button>
-            </NavLink>
-          )}
-          {showButton && (
-            <NavLink to={"/ventas"}>
-              <button className="btns" onClick={handleNavLinkClick}>
-                Ventas
-              </button>
-            </NavLink>
-          )}
-          {showButton && (
-            <NavLink to={"/modelo"}>
-              <button className="btns" onClick={handleNavLinkClick}>
-                Modelos
-              </button>
-            </NavLink>
-          )}
-         
-          <button onClick={handleSession} className="btnssesion">
-            {decodedToken.nombre} {''}
-            {decodedToken.apellido}
-          </button>
+          <div
+            className={`${
+              isScreenWidth()
+                ? "flex items-center"
+                : "grid grid-cols-1 text-center"
+            }`}
+            // onMouseLeave={handleMenuClose}
+          >
+            {showButton && (
+              <NavLink to="/home">
+                <button className="btns" onClick={handleNavLinkClick}>
+                  Home
+                </button>
+              </NavLink>
+            )}
+            {showButton && (
+              <NavLink to="/editar/producto">
+                <button className="btns" onClick={handleNavLinkClick}>
+                  Editar Producto
+                </button>
+              </NavLink>
+            )}
+            {showButton && (
+              <NavLink to={"/crear"}>
+                <button className="btns" onClick={handleNavLinkClick}>
+                  Registros
+                </button>
+              </NavLink>
+            )}
+            {showButton && (
+              <NavLink to={"/ventas"}>
+                <button className="btns" onClick={handleNavLinkClick}>
+                  Ventas
+                </button>
+              </NavLink>
+            )}
+            {showButton && (
+              <NavLink to={"/modelo"}>
+                <button className="btns" onClick={handleNavLinkClick}>
+                  Modelos
+                </button>
+              </NavLink>
+            )}
+
+            <button onClick={handleSession} className="btnssesion"
+            onMouseEnter={handleCerrar}
+            onMouseLeave={handleCerrar}>
+              {cerrar? 'Cerrar Sesion' : `${decodedToken.nombre} ${decodedToken.apellido}`}
+            </button>
           </div>
         </nav>
       )}
       <div
-        className={`sm:flex sm:justify-center dark:bg-slate-700 sm:text-center sm:items-center sm:mx-auto md:hidden ${
+        className={`sm:flex sm:justify-center dark:bg-slate-700 sm:text-center sm:min-h-12 sm:items-center sm:mx-auto md:hidden ${
           showMenu ? "hidden" : ""
         }`}
         onClick={toggleMenu}
+        onMouseEnter={handleMenuToggle}
       >
-        <TfiAlignJustify />
+        <TfiAlignJustify className="text-4xl" />
       </div>
     </div>
   );

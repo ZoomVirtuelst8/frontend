@@ -6,6 +6,7 @@ import { getAllProductos } from "../../redux/actions/registro/registerProductos.
 import { postCompra } from "../../redux/actions/registro/registerCompras.js";
 import { resetError } from "../../redux/actions/resetError.js";
 import { useNavigate } from "react-router-dom";
+import ButtonAtras from "../resource/ButtonAtras.jsx";
 
 const validation = (compra) => {
   const { producto, cantidad, precioCompra, precioVenta, precioDiferido } =
@@ -147,6 +148,7 @@ const Compras = () => {
   };
   return (
     <div className="contenedor">
+      <ButtonAtras />
       {confirmacion && (
         <div>
           <div className="confirmation">

@@ -74,7 +74,6 @@ const MyFreeCams = () => {
         const tokens = parseInt(match[3]);
         result.push({ user, dolares, tokens, quincena: id });
       }
-      console.log(result);
       return result;
     });
   };

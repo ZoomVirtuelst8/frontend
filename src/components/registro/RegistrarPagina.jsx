@@ -7,6 +7,7 @@ import {
   getAllPagina,
 } from "../../redux/actions/registro/registerPaginas.js";
 import { resetError } from "../../redux/actions/resetError.js";
+import ButtonAtras from "../resource/ButtonAtras.jsx";
 
 const valida = (pagina, paginas) => {
   let error = "";
@@ -47,7 +48,6 @@ const RegistrarPagina = () => {
     setPagina(paginaValue);
     setError(errorText);
   };
-  console.log(perror);
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -69,9 +69,9 @@ const RegistrarPagina = () => {
       setConfirmacion("");
     }
   };
-  console.log(showConfirmacion);
   return (
     <div className="contenedor">
+      <ButtonAtras />
       {showConfirmacion && (
         <div className="flex">
           <h1 className=" text-justify">{confirmacion}</h1>

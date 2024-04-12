@@ -331,7 +331,7 @@ const RegisterUser = () => {
       {showForm && (
         <div className="contenedor2">
           <div className="divTitulo">
-            <h1 className="title">Registro De Usuario</h1>
+            <h1 className="titulo">Registro De Usuario</h1>
           </div>
           {perror && (
             <div className="error">

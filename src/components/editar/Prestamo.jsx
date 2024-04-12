@@ -6,7 +6,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { MdOutlineSaveAs } from "react-icons/md";
-import ButtonHome from "../resource/ButtonHome";
+import { FcCancel } from "react-icons/fc";
 
 const Prestamo = () => {
   const { id } = useParams();
@@ -34,24 +34,26 @@ const Prestamo = () => {
     navigate("/home");
   };
   return (
-    <div className="contenedor1">
-      <div className="contenedor2">
-        <ButtonHome />
+    <div className="contenedor">
+      <div className="contenedor1">
         <div className="divTitulo">
           <h1 className="titulo">Editar Prestamo</h1>
         </div>
         <form>
           <section>
-            <label>Valor</label>
+            <label className="label">Valor</label>
             <input
               type="number"
               value={nPrestamo.cantidad}
               onChange={handleSavePrestamo}
-              className="inputEdit no-spin"
+              className="input no-spin"
             />
           </section>
-          <button onClick={updatePrestamos} className="btn-n">
+          <button onClick={updatePrestamos} className="btns">
             <MdOutlineSaveAs className="text-2xl" />
+          </button>
+          <button onClick={updatePrestamos} className="btns">
+            <FcCancel className="text-2xl" />
           </button>
         </form>
       </div>

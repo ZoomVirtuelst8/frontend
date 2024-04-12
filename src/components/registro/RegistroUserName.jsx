@@ -9,6 +9,7 @@ import { getAllPorcentaje } from "../../redux/actions/registro/registerPorcentaj
 import { postUserName } from "../../redux/actions/registro/registerUserName.js";
 import { resetError } from "../../redux/actions/resetError.js";
 import { useNavigate } from "react-router-dom";
+import ButtonAtras from "../resource/ButtonAtras.jsx";
 
 const RegistroUserName = () => {
   const dispatch = useDispatch();
@@ -116,6 +117,7 @@ const RegistroUserName = () => {
   };
   return (
     <div className="contenedor">
+      <ButtonAtras />
       <div>
         <form onSubmit={handlerSubmit}>
           <div className="divTitulo">

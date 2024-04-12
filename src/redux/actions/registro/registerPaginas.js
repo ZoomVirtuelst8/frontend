@@ -30,7 +30,6 @@ export const postPagina = (pagina, token) => {
         payload: data,
       });
     } catch (error) {
-      // console.log(error)
       const errorMessage = handleError(error)
       dispatch({
         type: ERROR,

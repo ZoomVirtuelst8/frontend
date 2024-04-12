@@ -7,6 +7,7 @@ import {
   getAllPorcentaje,
 } from "../../redux/actions/registro/registerPorcentaje.js";
 import { useNavigate } from "react-router-dom";
+import ButtonAtras from "../resource/ButtonAtras.jsx";
 
 const validationsError = (porcentajes) => {
   let error = {};
@@ -120,6 +121,7 @@ const RegisterPorcentaje = () => {
 
   return (
     <div className="contenedor">
+      <ButtonAtras />
       <div>
         <form onSubmit={handleSubmit}>
           <div className="divTitulo">

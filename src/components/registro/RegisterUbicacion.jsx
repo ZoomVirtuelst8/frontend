@@ -7,6 +7,7 @@ import {
   postUbicacion,
   getAllUbicacion,
 } from "../../redux/actions/registro/RegisterUbicacion.js";
+import ButtonAtras from "../resource/ButtonAtras.jsx";
 
 const validationsError = (ubicacion) => {
   let error = {};
@@ -46,6 +47,7 @@ const RegisterUbicacion = () => {
 
   return (
     <div className="contenedor">
+      <ButtonAtras />
       <div>
         <form onSubmit={handleSubmit}>
           <div className="divTitulo">

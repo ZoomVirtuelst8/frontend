@@ -6,6 +6,7 @@ import { getAllUser } from "../../redux/actions/registro/registerUser.js";
 import { getAllUbicacion } from "../../redux/actions/registro/RegisterUbicacion.js";
 import { getAllPorcentaje } from "../../redux/actions/registro/registerPorcentaje.js";
 import { relationUbicationAndPorcentaje } from "../../redux/actions/registro/relationUbicationAndPorcentaje.js";
+import ButtonAtras from "../resource/ButtonAtras.jsx";
 
 const RelationUbicationAndPorcenaje = () => {
   const dispatch = useDispatch();
@@ -94,6 +95,7 @@ const RelationUbicationAndPorcenaje = () => {
 
   return (
     <div className="contenedor">
+      <ButtonAtras />
       <div className="">
         <div className="divTitulo">
           <h1 className="titulo">

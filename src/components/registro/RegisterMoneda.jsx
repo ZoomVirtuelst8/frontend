@@ -5,6 +5,7 @@ import { getAllQuincena } from "../../redux/actions/registro/registerQuincena.js
 import { useDispatch, useSelector } from "react-redux";
 import { postMoneda } from "../../redux/actions/registro/registerMoneda.js";
 import { useNavigate } from "react-router-dom";
+import ButtonAtras from "../resource/ButtonAtras.jsx";
 
 const Moneda = () => {
   const [moneda, setMoneda] = useState({
@@ -106,6 +107,7 @@ const Moneda = () => {
 
   return (
     <div className="contenedor">
+      <ButtonAtras />
       <div>
         <div className="divTitulo">
           <h1 className="titulo">Registro De Moneda</h1>
