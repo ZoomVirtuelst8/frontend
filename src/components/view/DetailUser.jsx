@@ -21,8 +21,8 @@ const DetailUser = () => {
       dispatch(getAllPagina(token));
     }
   }, [id, dispatch]);
-  
-  userBI?.userName = [];
+
+  userBI.userName = [];
   for (const user of userBI?.useres) {
     for (const pagina of paginas) {
       if (pagina?.id === user?.pagina) {
