@@ -21,7 +21,8 @@ const DetailUser = () => {
       dispatch(getAllPagina(token));
     }
   }, [id, dispatch]);
-
+if (userBI?.useres.length > 0) {
+  
   userBI.userName = [];
   for (const user of userBI?.useres) {
     for (const pagina of paginas) {
@@ -34,6 +35,7 @@ const DetailUser = () => {
     }
   }
   userBI?.userName?.sort((a, b) => a?.pagina.localeCompare(b?.pagina));
+}
 
   const fecha = new Date(userBI?.createdAt);
 
