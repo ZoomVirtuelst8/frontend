@@ -23,6 +23,8 @@ const User = () => {
   const [editedUser, setEditedUser] = useState({
     nombre: "",
     apellido: "",
+    session: "",
+    password: "",
     direccion: "",
     telefono: "",
     whatsapp: "",
@@ -40,11 +42,13 @@ const User = () => {
     setEditedUser({
       nombre: userBI?.nombre || "",
       apellido: userBI?.apellido || "",
+      session: userBI?.session || "",
+      password: "",
       direccion: userBI?.direccion || "",
       telefono: userBI?.telefono || "",
       whatsapp: userBI?.whatsapp || "",
-      ubicacion: userBI?.p_ubicacion?.ubicacion || "",
-      porcentaje: userBI?.p_porcentaje?.nombre || "",
+      ubicacion: userBI?.p_ubicacion?.id || "",
+      porcentaje: userBI?.p_porcentaje?.id || "",
       admin: userBI?.admin || false,
     });
   }, [userBI]);
@@ -66,15 +70,18 @@ const User = () => {
     setEditedUser({
       nombre: userBI?.nombre || "",
       apellido: userBI?.apellido || "",
+      session: userBI?.session || "",
+      password: "",
       direccion: userBI?.direccion || "",
       telefono: userBI?.telefono || "",
       whatsapp: userBI?.whatsapp || "",
-      ubicacion: userBI?.p_ubicacion?.ubicacion || "",
-      porcentaje: userBI?.p_porcentaje?.nombre || "",
+      ubicacion: userBI?.p_ubicacion?.id || "",
+      porcentaje: userBI?.p_porcentaje?.id || "",
       admin: userBI?.admin || false,
     });
     navigate(`/modelo`);
   };
+
   return (
     <div className="contenedor1">
       <div className="contenedor2">
@@ -110,6 +117,38 @@ const User = () => {
                       type="text"
                       name="apellido"
                       value={editedUser.apellido}
+                      onChange={handleInputChange}
+                      className="input"
+                    />
+                  </div>
+                </section>
+
+                <section className="section">
+                  <div className="divlabel">
+                    <label className="label">User:</label>
+                  </div>
+                  <div className="divinput">
+                    {" "}
+                    <input
+                      type="text"
+                      name="session"
+                      value={editedUser.session}
+                      onChange={handleInputChange}
+                      className="input"
+                    />
+                  </div>
+                </section>
+
+                <section className="section">
+                  <div className="divlabel">
+                    <label className="label">Password:</label>
+                  </div>
+                  <div className="divinput">
+                    {" "}
+                    <input
+                      type="password"
+                      name="password"
+                      value={editedUser?.password}
                       onChange={handleInputChange}
                       className="input"
                     />
